@@ -118,6 +118,7 @@ Included now:
 - canonical mapping model foundation
 - index template model foundation
 - component template model foundation
+- normalized field traversal helpers
 - normalization diagnostics
 - explicit file loading and directory discovery
 - `.local/` and default build/vendor directory ignores during discovery
@@ -255,6 +256,7 @@ Current phase:
 - input discovery
 - JSON/JSONL parser foundations
 - canonical model and normalizer foundations
+- normalized field traversal helpers
 - parse and normalization diagnostic reporting
 
 No production release exists yet.

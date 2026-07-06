@@ -8,6 +8,34 @@ Codex should implement SearchIndexLint in small, reviewable changes that follow 
 
 Codex must not invent product scope. If a task is not in the roadmap, Codex should stop and ask for maintainer review.
 
+## Current State Before Next Sprint
+
+Implemented foundations:
+
+- Go CLI skeleton
+- parse-only `lint` command with console and JSON reports
+- input discovery for `.json`, `.jsonl`, and `.ndjson`
+- JSON and JSONL/NDJSON parsing
+- canonical mapping/template model foundations
+- canonical `model.Corpus`
+- normalized field traversal helpers
+- rule registry and runner foundation
+
+Not implemented:
+
+- real SIL rules
+- rule findings emitted by CLI
+- YAML
+- config loading
+- suppressions
+- SARIF
+- Markdown reporter
+- baseline
+- diff
+- cluster mode
+
+Next expected sprint should implement the first real rule or rule/report wiring. Do not reimplement parser, normalizer, corpus, or traversal foundations.
+
 ## Working rules
 
 1. Do not start by adding many rules.

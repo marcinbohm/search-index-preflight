@@ -1,6 +1,6 @@
 # Contributing to SearchIndexLint
 
-SearchIndexLint is an offline-first Elasticsearch/OpenSearch index index schema risk linter. Contributions are welcome, but the project is strict about scope, fixtures, tests, and public-data safety.
+SearchIndexLint is an offline-first Elasticsearch/OpenSearch index schema risk linter. Contributions are welcome, but the project is strict about scope, fixtures, tests, and public-data safety.
 
 ## Project scope
 
@@ -32,14 +32,14 @@ Out of scope before v1:
 
 Requirements:
 
-- Go version: TBD
+- Go version: see `go.mod`
 - Make: optional, TBD
 - golangci-lint: optional before alpha, recommended later
 
 Clone:
 
 ```bash
-git clone https://github.com/search-index-lint/search-index-lint.git
+git clone https://github.com/marcinbohm/search-index-lint.git
 cd search-index-lint
 ```
 
@@ -53,7 +53,7 @@ Run locally:
 
 ```bash
 go run ./cmd/search-index-lint --help
-go run ./cmd/search-index-lint lint ./fixtures --format json
+go run ./cmd/search-index-lint lint --mapping examples/basic/mapping.json
 ```
 
 Format:
@@ -69,6 +69,8 @@ go vet ./...
 ```
 
 ## How to add a rule
+
+Real SIL rules are not implemented yet. Coordinate first-rule work with maintainers before adding rule behavior.
 
 1. Open or create a rule request issue.
 2. Confirm the rule fits the roadmap.

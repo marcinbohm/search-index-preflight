@@ -6,6 +6,12 @@ SearchIndexLint is an offline-first CLI for linting Elasticsearch and OpenSearch
 
 It is designed for teams that treat search schemas as code and want PR-time feedback before risky changes reach production.
 
+## Status
+
+Status: pre-alpha / foundation phase.
+
+The current CLI is not production-ready. It can parse and normalize JSON mappings/templates and JSONL/NDJSON sample documents, then report parse and normalization diagnostics. Real SIL rule findings are not implemented or emitted yet.
+
 ## Problem statement
 
 Elasticsearch and OpenSearch mappings can be syntactically valid and operationally dangerous.
@@ -57,28 +63,41 @@ SearchIndexLint is not a replacement for vendor APIs. Later versions may use rea
 
 ## Installation
 
-TBD after the first release.
+No release artifacts exist yet.
 
-Expected future options:
+Planned future options:
 
 ```bash
 brew install search-index-lint
 go install github.com/marcinbohm/search-index-lint/cmd/search-index-lint@latest
 ```
 
-## Example usage
+## Local Development
 
-Current pre-alpha behavior parses JSON mappings/templates and JSONL sample documents, normalizes supported schema shapes into internal models, then reports parse and normalization diagnostics only. Schema rules are not implemented yet.
+```bash
+go test ./...
+go vet ./...
+go run ./cmd/search-index-lint --help
+go run ./cmd/search-index-lint lint --mapping examples/basic/mapping.json
+```
+
+## Current Usage
+
+Current pre-alpha behavior parses JSON mappings/templates and JSONL/NDJSON sample documents, normalizes supported schema shapes into internal models, then reports parse and normalization diagnostics only. Schema rules are not implemented yet.
 
 ```bash
 search-index-lint lint --mapping mapping.json
 search-index-lint lint --template index-template.json
+search-index-lint lint --component-template component-template.json
 search-index-lint lint --sample-docs samples.jsonl
+search-index-lint lint --sample-docs samples.ndjson
 search-index-lint lint --mapping mapping.json --sample-docs samples.jsonl
 search-index-lint lint ./schemas
 search-index-lint rules list
 search-index-lint explain SIL001
 ```
+
+Directory mode currently discovers only `.json`, `.jsonl`, and `.ndjson` files.
 
 ## Example output
 
@@ -114,13 +133,15 @@ Included now:
 - Go CLI skeleton
 - `version`, `lint`, `rules list`, and `explain` commands
 - JSON mapping/template parsing
-- JSONL sample document parsing with line-number diagnostics
+- JSONL/NDJSON sample document parsing with line-number diagnostics
+- directory discovery for `.json`, `.jsonl`, and `.ndjson`
+- parse diagnostics
+- normalization diagnostics
 - canonical mapping model foundation
 - index template model foundation
 - component template model foundation
 - canonical corpus model
 - normalized field traversal helpers
-- normalization diagnostics
 - explicit file loading and directory discovery
 - `.local/` and default build/vendor directory ignores during discovery
 - severity, confidence, finding, diagnostic, and summary models
@@ -130,14 +151,19 @@ Included now:
 
 Not implemented yet:
 
-- YAML parsing
 - real schema rules
+- rule findings emitted by the CLI
+- YAML parsing
 - Markdown reporter
 - SARIF reporter
+- GitHub Action
 - baseline mode
 - diff mode
 - cluster mode
 - auto-fix
+- config loading
+- suppressions
+- releases, Homebrew formula, and Docker image
 
 ## Planned MVP scope
 
@@ -206,7 +232,8 @@ Live cluster mode is not part of the MVP. If added later, it must be read-only a
 ### Pre-alpha
 
 - Go CLI skeleton
-- JSON/YAML/JSONL parsing
+- JSON/JSONL parsing
+- YAML parsing
 - canonical mapping/template model
 - initial rule registry
 - 8-10 high-signal rules
@@ -248,9 +275,7 @@ Live cluster mode is not part of the MVP. If added later, it must be read-only a
 - documented security policy
 - documented contribution process
 
-## Project status
-
-Status: pre-alpha.
+## Project Phase
 
 Current phase:
 
@@ -285,4 +310,4 @@ SearchIndexLint detects risk. It does not prove a schema is safe.
 
 It does not replace staging validation, integration tests, load tests, rollout planning, cluster observability, experienced operator review, vendor documentation, or incident response judgment.
 
-A clean SearchIndexLint report means only that the implemented offline rules did not detect configured risk patterns in the supplied inputs.
+A clean current pre-alpha report means only that parsing and normalization completed without diagnostics. It does not mean schema risk rules have run.

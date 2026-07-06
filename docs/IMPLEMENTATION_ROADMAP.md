@@ -15,6 +15,25 @@
 - Rule IDs must be stable.
 - Heuristics must be conservative.
 
+## Current Implementation Status
+
+Completed foundations:
+
+- M0 project skeleton
+- M1 parse-only lint foundation
+- M1.5 canonical model and traversal helpers
+- M2 rule registry and runner foundation
+
+Current CLI behavior:
+
+- `lint` reports parse and normalization diagnostics only
+- no real SIL rules are implemented
+- rule execution is not wired into the CLI
+
+Next:
+
+- first real rule implementation, likely SIL001, with focused tests and fixtures
+
 ## Pre-alpha
 
 Goal: prove parser, canonical model, rule engine, and fixture-driven development.
@@ -22,7 +41,8 @@ Goal: prove parser, canonical model, rule engine, and fixture-driven development
 Scope:
 
 - Go CLI skeleton
-- JSON/YAML/JSONL parsing
+- JSON/JSONL parsing foundation
+- YAML parsing
 - mapping/index/component template models
 - sample schema model
 - rule registry

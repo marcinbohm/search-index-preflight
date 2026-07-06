@@ -49,6 +49,32 @@ search-index-lint CLI
         +-- SARIF
 ```
 
+## Current Implemented Architecture
+
+Current pre-alpha code implements this foundation path:
+
+```text
+input discovery -> parser -> normalizer -> model.Corpus -> rule runner foundation -> reports
+```
+
+Implemented foundations:
+
+- input discovery for explicit files and directories
+- JSON parser for mappings/templates
+- JSONL/NDJSON parser for sample documents
+- mapping, index template, and component template normalization
+- `model.Corpus` as the canonical shared corpus
+- normalized field traversal helpers in `internal/model`
+- rule registry and runner foundation
+- console and JSON diagnostic reports
+
+Current CLI behavior:
+
+- `lint` reports parse and normalization diagnostics only
+- rule runner exists but is not wired into `lint` for real findings
+- no real SIL rules are implemented
+- YAML, Markdown, SARIF, baseline, diff, config, suppressions, and cluster mode are planned future work
+
 ## Module architecture
 
 ```text
@@ -97,7 +123,7 @@ The engine should return structured results, not formatted text.
 
 ## Parsers
 
-Parsers must handle JSON/YAML mappings, JSON/YAML index templates, JSON/YAML component templates, and JSONL sample documents.
+Parsers must eventually handle JSON/YAML mappings, JSON/YAML index templates, JSON/YAML component templates, and JSONL sample documents. The current implementation supports JSON mappings/templates and JSONL/NDJSON sample documents only.
 
 Parser output should preserve source file path, raw document kind, JSON pointer, line/column where practical, and parse diagnostics.
 
@@ -145,7 +171,7 @@ Rules should be small, testable, and metadata-driven.
 ```go
 type Rule interface {
     Metadata() Metadata
-    Check(ctx Context, doc Corpus) ([]Finding, error)
+    Check(ctx Context, corpus model.Corpus) ([]Finding, error)
 }
 ```
 

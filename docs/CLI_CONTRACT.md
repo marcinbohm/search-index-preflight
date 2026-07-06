@@ -6,7 +6,26 @@ Draft contract.
 
 Implemented behavior must match this contract unless an ADR updates it.
 
-Current pre-alpha implementation supports JSON mappings/templates and JSONL sample documents for parse and normalization diagnostics only. YAML, real rules, Markdown, SARIF, baseline, and diff behavior are planned but not implemented.
+Current pre-alpha implementation supports `lint`, `version`, `rules list` as a stub, and `explain` as a stub.
+
+Current `lint` behavior:
+
+- accepts JSON mappings/templates and JSONL/NDJSON sample documents
+- discovers `.json`, `.jsonl`, and `.ndjson` files in directory mode
+- supports `--format console|json`
+- reports parse and normalization diagnostics only
+
+Planned but not implemented:
+
+- real SIL rule findings
+- YAML input
+- Markdown output
+- SARIF output
+- config loading
+- suppressions
+- baseline
+- diff
+- cluster commands
 
 ## Command overview
 
@@ -54,26 +73,26 @@ search-index-lint lint --component-template component-template.json
 search-index-lint lint --sample-docs samples.jsonl
 search-index-lint lint --mapping mapping.json --sample-docs samples.jsonl
 search-index-lint lint ./schemas
-search-index-lint lint ./schemas --format markdown
-search-index-lint lint ./schemas --format sarif --output search-index-lint.sarif
+search-index-lint lint ./schemas --format markdown              # planned
+search-index-lint lint ./schemas --format sarif --output search-index-lint.sarif  # planned
 ```
 
 Flags:
 
 ```text
---mapping <path>                 Mapping JSON/YAML file
---template <path>                Index template JSON/YAML file
---component-template <path>      Component template JSON/YAML file
+--mapping <path>                 Mapping JSON file; YAML planned
+--template <path>                Index template JSON file; YAML planned
+--component-template <path>      Component template JSON file; YAML planned
 --sample-docs <path>             JSONL sample documents
---config <path>                  Config file
---format <format>                console, json, markdown, sarif
+--config <path>                  Config file; planned
+--format <format>                console, json; markdown and sarif planned
 --output <path>                  Output file
 --fail-on <severity>             Minimum severity that returns exit code 1
---baseline <path>                Baseline file
---baseline-mode <mode>           hide_existing, report_existing, fail_on_new
---disable-rule <id>              Disable rule; repeatable
---enable-rule <id>               Enable rule; repeatable
---only-rule <id>                 Run only selected rule; repeatable
+--baseline <path>                Baseline file; planned
+--baseline-mode <mode>           hide_existing, report_existing, fail_on_new; planned
+--disable-rule <id>              Disable rule; repeatable; planned
+--enable-rule <id>               Enable rule; repeatable; planned
+--only-rule <id>                 Run only selected rule; repeatable; planned
 --include <glob>                 Include glob; repeatable
 --exclude <glob>                 Exclude glob; repeatable
 --max-sample-docs <n>            Limit sample docs loaded per file
@@ -195,18 +214,19 @@ search-index-lint lint ./schemas
 
 Directory scan behavior:
 
-- use config globs when config is present
-- otherwise infer file kind from file names and top-level keys
+- use config globs when config is present; planned
+- currently include only `.json`, `.jsonl`, and `.ndjson`
+- infer JSON document kind from top-level keys
 - ignore hidden directories by default
-- ignore `vendor`, `node_modules`, `.git`, `dist`, `build` by default
+- ignore `vendor`, `node_modules`, `.git`, `dist`, `build`, and `.local` by default
 - report ambiguous files as diagnostics
 
 ## Output formats
 
 - console: default human-readable output
 - JSON: stable machine-readable output
-- Markdown: PR comment or saved report
-- SARIF: GitHub code scanning, alpha scope
+- Markdown: PR comment or saved report; planned
+- SARIF: GitHub code scanning, alpha scope; planned
 
 JSON skeleton:
 

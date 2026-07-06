@@ -1,13 +1,13 @@
 package model
 
 type Summary struct {
-	FilesScanned  int `json:"files_scanned,omitempty"`
-	FindingsTotal int `json:"findings_total,omitempty"`
-	Critical      int `json:"critical,omitempty"`
-	Error         int `json:"error,omitempty"`
-	Warning       int `json:"warning,omitempty"`
-	Info          int `json:"info,omitempty"`
-	ExitCode      int `json:"exit_code,omitempty"`
+	FilesScanned  int `json:"files_scanned"`
+	FindingsTotal int `json:"findings_total"`
+	Critical      int `json:"critical"`
+	Error         int `json:"error"`
+	Warning       int `json:"warning"`
+	Info          int `json:"info"`
+	ExitCode      int `json:"exit_code"`
 }
 
 type Tool struct {

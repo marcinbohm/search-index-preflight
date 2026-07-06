@@ -119,7 +119,7 @@ func runSIL001(t *testing.T, mapping model.Mapping) []model.Finding {
 
 func requireSIL001Finding(t *testing.T, findings []model.Finding, severity model.Severity) {
 	t.Helper()
-	requireSIL001FindingForLocation(t, findings, severity, "mapping.json", "/")
+	requireSIL001FindingForLocation(t, findings, severity, "mapping.json", "")
 }
 
 func requireSIL001FindingForLocation(t *testing.T, findings []model.Finding, severity model.Severity, file string, pointer string) {

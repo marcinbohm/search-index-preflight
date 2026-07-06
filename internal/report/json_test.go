@@ -26,7 +26,15 @@ func TestWriteJSONDeterministicEmptyResult(t *testing.T) {
     "name": "SearchIndexLint",
     "version": "0.0.0-dev"
   },
-  "summary": {},
+  "summary": {
+    "files_scanned": 0,
+    "findings_total": 0,
+    "critical": 0,
+    "error": 0,
+    "warning": 0,
+    "info": 0,
+    "exit_code": 0
+  },
   "findings": [],
   "diagnostics": []
 }

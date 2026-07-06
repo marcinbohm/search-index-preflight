@@ -22,7 +22,7 @@ func TestWriteConsoleFormatsFindingJSONPointerWithFragmentSeparator(t *testing.T
 				ID:          "SIL001",
 				Severity:    model.SeverityError,
 				File:        "mapping.json",
-				JSONPointer: "/",
+				JSONPointer: "",
 				Message:     "root pointer",
 			},
 		},
@@ -40,7 +40,10 @@ func TestWriteConsoleFormatsFindingJSONPointerWithFragmentSeparator(t *testing.T
 	if strings.Contains(output, "bigtemplate.json/template/mappings") {
 		t.Fatalf("expected output not to contain concatenated path/pointer location, got:\n%s", output)
 	}
-	if !strings.Contains(output, "mapping.json#/") {
-		t.Fatalf("expected output to contain root JSON pointer fragment location, got:\n%s", output)
+	if !strings.Contains(output, "mapping.json") {
+		t.Fatalf("expected output to contain root finding file location, got:\n%s", output)
+	}
+	if strings.Contains(output, "mapping.json#/") {
+		t.Fatalf("expected output not to contain root JSON pointer fragment location, got:\n%s", output)
 	}
 }

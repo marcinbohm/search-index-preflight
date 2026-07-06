@@ -7,7 +7,11 @@
   "summary": {
     "files_scanned": 1,
     "findings_total": 1,
-    "warning": 1
+    "critical": 0,
+    "error": 0,
+    "warning": 1,
+    "info": 0,
+    "exit_code": 0
   },
   "findings": [
     {
@@ -18,10 +22,9 @@
       "category": "mapping-limits",
       "determinism": "deterministic",
       "file": "fixtures/mapping-limits/sil001-total-fields-limit/mapping-near-limit.json",
-      "json_pointer": "/",
       "message": "Mapping has 800 normalized fields, approaching the default total fields limit of 1000.",
       "remediation": "Reduce explicit field count, restrict dynamic mappings, consider flattened/flat_object only when query semantics fit, split unrelated data into separate indices, or raise index.mapping.total_fields.limit only with operational review.",
-      "fingerprint": "SIL001:fixtures/mapping-limits/sil001-total-fields-limit/mapping-near-limit.json:/"
+      "fingerprint": "SIL001:fixtures/mapping-limits/sil001-total-fields-limit/mapping-near-limit.json:"
     }
   ],
   "diagnostics": []

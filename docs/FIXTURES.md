@@ -125,6 +125,16 @@ Not allowed:
 | compatibility | SIL029 |
 | metadata | SIL030 |
 
+## Current fixture packs
+
+The first public fixture pack is:
+
+```text
+fixtures/mapping-limits/sil001-total-fields-limit/
+```
+
+It covers the implemented `SIL001` default-threshold behavior with synthetic near-limit and over-limit mappings plus expected JSON reports.
+
 ## Expected output
 
 Every fixture must include `expected.json`.

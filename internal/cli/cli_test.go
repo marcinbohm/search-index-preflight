@@ -91,6 +91,96 @@ func TestLintFormatJSONReturnsValidJSON(t *testing.T) {
 	}
 }
 
+func TestLintFormatJSONWithSIL001Finding(t *testing.T) {
+	path := writeTempFile(t, "mapping.json", mappingJSONWithFields(1000))
+	code, stdout, stderr := executeForTest("lint", "--mapping", path, "--format", "json")
+	if code != exitFindings {
+		t.Fatalf("Execute returned %d, want %d; stderr=%s", code, exitFindings, stderr)
+	}
+
+	var result model.RunResult
+	if err := json.Unmarshal([]byte(stdout), &result); err != nil {
+		t.Fatalf("stdout is not valid JSON: %v\n%s", err, stdout)
+	}
+	if result.Summary.FindingsTotal != 1 {
+		t.Fatalf("findings_total = %d, want 1", result.Summary.FindingsTotal)
+	}
+	if result.Summary.Error != 1 {
+		t.Fatalf("summary.error = %d, want 1", result.Summary.Error)
+	}
+	if result.Summary.ExitCode != exitFindings {
+		t.Fatalf("summary.exit_code = %d, want %d", result.Summary.ExitCode, exitFindings)
+	}
+	if len(result.Findings) != 1 {
+		t.Fatalf("findings length = %d, want 1", len(result.Findings))
+	}
+	if result.Findings[0].ID != "SIL001" {
+		t.Fatalf("finding ID = %q, want SIL001", result.Findings[0].ID)
+	}
+	if result.Findings[0].Severity != model.SeverityError {
+		t.Fatalf("finding severity = %q, want %q", result.Findings[0].Severity, model.SeverityError)
+	}
+	if result.Diagnostics == nil {
+		t.Fatal("diagnostics is nil, want empty slice")
+	}
+	if len(result.Diagnostics) != 0 {
+		t.Fatalf("diagnostics length = %d, want 0", len(result.Diagnostics))
+	}
+}
+
+func TestLintSIL001FixtureExpectedJSONReports(t *testing.T) {
+	originalWD, err := os.Getwd()
+	if err != nil {
+		t.Fatalf("Getwd returned error: %v", err)
+	}
+	repoRoot := filepath.Clean(filepath.Join("..", ".."))
+	if err := os.Chdir(repoRoot); err != nil {
+		t.Fatalf("Chdir returned error: %v", err)
+	}
+	t.Cleanup(func() {
+		if err := os.Chdir(originalWD); err != nil {
+			t.Fatalf("restore working directory: %v", err)
+		}
+	})
+
+	tests := []struct {
+		name     string
+		mapping  string
+		expected string
+		code     int
+	}{
+		{
+			name:     "near limit",
+			mapping:  "fixtures/mapping-limits/sil001-total-fields-limit/mapping-near-limit.json",
+			expected: "fixtures/mapping-limits/sil001-total-fields-limit/expected-near-limit.json",
+			code:     exitSuccess,
+		},
+		{
+			name:     "over limit",
+			mapping:  "fixtures/mapping-limits/sil001-total-fields-limit/mapping-over-limit.json",
+			expected: "fixtures/mapping-limits/sil001-total-fields-limit/expected-over-limit.json",
+			code:     exitFindings,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			code, stdout, stderr := executeForTest("lint", "--mapping", tt.mapping, "--format", "json")
+			if code != tt.code {
+				t.Fatalf("Execute returned %d, want %d; stdout=%s stderr=%s", code, tt.code, stdout, stderr)
+			}
+
+			expected, err := os.ReadFile(tt.expected)
+			if err != nil {
+				t.Fatalf("ReadFile returned error: %v", err)
+			}
+			if stdout != string(expected) {
+				t.Fatalf("JSON report mismatch\nactual:\n%s\nexpected:\n%s", stdout, string(expected))
+			}
+		})
+	}
+}
+
 func TestLintDirectoryDiscoveryIgnoresLocal(t *testing.T) {
 	root := t.TempDir()
 	writeFileAt(t, root, "mapping.json", `{"properties":{}}`)

@@ -62,6 +62,52 @@ func TestSIL001CountsRuntimeFields(t *testing.T) {
 	requireSIL001Finding(t, findings, model.SeverityWarning)
 }
 
+func TestSIL001IndexTemplateMappingOverLimit(t *testing.T) {
+	mapping := model.Mapping{
+		Source:     testSource("index-template.json"),
+		Properties: testFieldsForSource(1000, testSource("index-template.json")),
+	}
+
+	findings, err := NewSIL001().Check(Context{}, model.Corpus{
+		IndexTemplates: []model.IndexTemplate{
+			{
+				Source: testSource("index-template.json"),
+				Template: model.TemplateBody{
+					Mappings: &mapping,
+				},
+			},
+		},
+	})
+	if err != nil {
+		t.Fatalf("SIL001 returned error: %v", err)
+	}
+
+	requireSIL001FindingForLocation(t, findings, model.SeverityError, "index-template.json", "/template/mappings")
+}
+
+func TestSIL001ComponentTemplateMappingOverLimit(t *testing.T) {
+	mapping := model.Mapping{
+		Source:     testSource("component-template.json"),
+		Properties: testFieldsForSource(1000, testSource("component-template.json")),
+	}
+
+	findings, err := NewSIL001().Check(Context{}, model.Corpus{
+		ComponentTemplates: []model.ComponentTemplate{
+			{
+				Source: testSource("component-template.json"),
+				Template: model.TemplateBody{
+					Mappings: &mapping,
+				},
+			},
+		},
+	})
+	if err != nil {
+		t.Fatalf("SIL001 returned error: %v", err)
+	}
+
+	requireSIL001FindingForLocation(t, findings, model.SeverityError, "component-template.json", "/template/mappings")
+}
+
 func runSIL001(t *testing.T, mapping model.Mapping) []model.Finding {
 	t.Helper()
 	findings, err := NewSIL001().Check(Context{}, model.Corpus{Mappings: []model.Mapping{mapping}})
@@ -73,6 +119,11 @@ func runSIL001(t *testing.T, mapping model.Mapping) []model.Finding {
 
 func requireSIL001Finding(t *testing.T, findings []model.Finding, severity model.Severity) {
 	t.Helper()
+	requireSIL001FindingForLocation(t, findings, severity, "mapping.json", "/")
+}
+
+func requireSIL001FindingForLocation(t *testing.T, findings []model.Finding, severity model.Severity, file string, pointer string) {
+	t.Helper()
 	if len(findings) != 1 {
 		t.Fatalf("SIL001 returned %d findings, want 1: %#v", len(findings), findings)
 	}
@@ -83,17 +134,20 @@ func requireSIL001Finding(t *testing.T, findings []model.Finding, severity model
 	if finding.Severity != severity {
 		t.Fatalf("finding severity = %q, want %q", finding.Severity, severity)
 	}
-	if finding.File != "mapping.json" {
-		t.Fatalf("finding file = %q, want mapping.json", finding.File)
+	if finding.File != file {
+		t.Fatalf("finding file = %q, want %q", finding.File, file)
 	}
-	if finding.JSONPointer != "/" {
-		t.Fatalf("finding JSON pointer = %q, want /", finding.JSONPointer)
+	if finding.JSONPointer != pointer {
+		t.Fatalf("finding JSON pointer = %q, want %q", finding.JSONPointer, pointer)
 	}
 }
 
 func testFields(count int) []model.Field {
+	return testFieldsForSource(count, testSource("mapping.json"))
+}
+
+func testFieldsForSource(count int, source model.Source) []model.Field {
 	fields := make([]model.Field, 0, count)
-	source := testSource("mapping.json")
 	for i := 0; i < count; i++ {
 		name := "field_" + strconv.Itoa(i)
 		fields = append(fields, model.Field{

@@ -1,0 +1,29 @@
+{
+  "schema_version": "0.1",
+  "tool": {
+    "name": "SearchIndexLint",
+    "version": "0.0.0-dev"
+  },
+  "summary": {
+    "files_scanned": 1,
+    "findings_total": 1,
+    "error": 1,
+    "exit_code": 1
+  },
+  "findings": [
+    {
+      "id": "SIL001",
+      "name": "total-fields-limit-risk",
+      "severity": "error",
+      "confidence": "high",
+      "category": "mapping-limits",
+      "determinism": "deterministic",
+      "file": "fixtures/mapping-limits/sil001-total-fields-limit/mapping-over-limit.json",
+      "json_pointer": "/",
+      "message": "Mapping has 1000 normalized fields, exceeding the default total fields limit of 1000.",
+      "remediation": "Reduce explicit field count, restrict dynamic mappings, consider flattened/flat_object only when query semantics fit, split unrelated data into separate indices, or raise index.mapping.total_fields.limit only with operational review.",
+      "fingerprint": "SIL001:fixtures/mapping-limits/sil001-total-fields-limit/mapping-over-limit.json:/"
+    }
+  ],
+  "diagnostics": []
+}

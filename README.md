@@ -101,7 +101,18 @@ Directory mode currently discovers only `.json`, `.jsonl`, and `.ndjson` files.
 
 ## Example output
 
-Planned rule output shape:
+Current `SIL001` finding example:
+
+```bash
+search-index-lint lint --mapping fixtures/mapping-limits/sil001-total-fields-limit/mapping-over-limit.json
+```
+
+```text
+error SIL001: fixtures/mapping-limits/sil001-total-fields-limit/mapping-over-limit.json#/: Mapping has 1000 normalized fields, exceeding the default total fields limit of 1000.
+  Remediation: Reduce explicit field count, restrict dynamic mappings, consider flattened/flat_object only when query semantics fit, split unrelated data into separate indices, or raise index.mapping.total_fields.limit only with operational review.
+```
+
+Planned future multi-rule output shape:
 
 ```text
 SearchIndexLint 0.1.0

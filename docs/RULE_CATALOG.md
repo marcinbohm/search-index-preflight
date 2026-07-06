@@ -89,7 +89,7 @@ Implementation status: implemented in pre-alpha with default limit `1000` and wa
 Bad input:
 
 ```text
-TBD minimal fixture example for SIL001.
+fixtures/mapping-limits/sil001-total-fields-limit/mapping-over-limit.json
 ```
 
 Remediation:

@@ -6,7 +6,7 @@ Draft contract.
 
 Implemented behavior must match this contract unless an ADR updates it.
 
-Current pre-alpha implementation supports JSON mappings/templates and JSONL sample documents for parse diagnostics only. YAML, real rules, Markdown, SARIF, baseline, and diff behavior are planned but not implemented.
+Current pre-alpha implementation supports JSON mappings/templates and JSONL sample documents for parse and normalization diagnostics only. YAML, real rules, Markdown, SARIF, baseline, and diff behavior are planned but not implemented.
 
 ## Command overview
 

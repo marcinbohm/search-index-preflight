@@ -68,7 +68,7 @@ go install github.com/marcinbohm/search-index-lint/cmd/search-index-lint@latest
 
 ## Example usage
 
-Current pre-alpha behavior parses JSON mappings/templates and JSONL sample documents, then reports parse diagnostics only. Schema rules are not implemented yet.
+Current pre-alpha behavior parses JSON mappings/templates and JSONL sample documents, normalizes supported schema shapes into internal models, then reports parse and normalization diagnostics only. Schema rules are not implemented yet.
 
 ```bash
 search-index-lint lint --mapping mapping.json
@@ -115,6 +115,10 @@ Included now:
 - `version`, `lint`, `rules list`, and `explain` commands
 - JSON mapping/template parsing
 - JSONL sample document parsing with line-number diagnostics
+- canonical mapping model foundation
+- index template model foundation
+- component template model foundation
+- normalization diagnostics
 - explicit file loading and directory discovery
 - `.local/` and default build/vendor directory ignores during discovery
 - severity, confidence, finding, diagnostic, and summary models
@@ -124,7 +128,6 @@ Included now:
 Not implemented yet:
 
 - YAML parsing
-- canonical mapping/template model
 - real schema rules
 - Markdown reporter
 - SARIF reporter
@@ -251,7 +254,8 @@ Current phase:
 - project skeleton
 - input discovery
 - JSON/JSONL parser foundations
-- parse diagnostic reporting
+- canonical model and normalizer foundations
+- parse and normalization diagnostic reporting
 
 No production release exists yet.
 

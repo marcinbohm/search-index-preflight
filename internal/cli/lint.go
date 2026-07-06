@@ -8,6 +8,7 @@ import (
 
 	"github.com/marcinbohm/search-index-lint/internal/input"
 	"github.com/marcinbohm/search-index-lint/internal/model"
+	"github.com/marcinbohm/search-index-lint/internal/normalizer"
 	"github.com/marcinbohm/search-index-lint/internal/parser"
 	"github.com/marcinbohm/search-index-lint/internal/report"
 )
@@ -60,6 +61,8 @@ func runLint(args []string, stdout, stderr io.Writer) int {
 	for _, document := range documents {
 		diagnostics = append(diagnostics, document.Diagnostics...)
 	}
+	corpus := normalizer.Normalize(documents)
+	diagnostics = append(diagnostics, corpus.Diagnostics...)
 
 	exitCode := exitSuccess
 	if len(diagnostics) > 0 {

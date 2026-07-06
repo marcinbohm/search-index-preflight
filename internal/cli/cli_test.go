@@ -117,6 +117,80 @@ func TestLintDirectorySkipsUnsupportedInvalidFiles(t *testing.T) {
 	}
 }
 
+func TestLintDirectoryUnknownJSONDocumentKindReturnsInputError(t *testing.T) {
+	root := t.TempDir()
+	writeFileAt(t, root, "unknown.json", `{"name":"not-a-search-schema"}`)
+
+	code, stdout, stderr := executeForTest("lint", root)
+	if code != exitInput {
+		t.Fatalf("Execute returned %d, want %d; stdout=%s stderr=%s", code, exitInput, stdout, stderr)
+	}
+	if !strings.Contains(stdout, "unknown JSON document kind") {
+		t.Fatalf("stdout %q does not contain unknown kind diagnostic", stdout)
+	}
+}
+
+func TestLintDirectoryValidMappingJSONReturnsSuccess(t *testing.T) {
+	root := t.TempDir()
+	writeFileAt(t, root, "mapping.json", `{"properties":{"status":{"type":"keyword"}}}`)
+
+	code, stdout, stderr := executeForTest("lint", root)
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stdout=%s stderr=%s", code, exitSuccess, stdout, stderr)
+	}
+}
+
+func TestLintDirectoryValidIndexTemplateJSONReturnsSuccess(t *testing.T) {
+	root := t.TempDir()
+	writeFileAt(t, root, "index-template.json", `{
+  "index_patterns": ["logs-*"],
+  "template": {
+    "mappings": {
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        }
+      }
+    }
+  }
+}`)
+
+	code, stdout, stderr := executeForTest("lint", root)
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stdout=%s stderr=%s", code, exitSuccess, stdout, stderr)
+	}
+}
+
+func TestLintDirectoryValidComponentTemplateJSONReturnsSuccess(t *testing.T) {
+	root := t.TempDir()
+	writeFileAt(t, root, "component-template.json", `{
+  "template": {
+    "mappings": {
+      "properties": {
+        "service.name": {
+          "type": "keyword"
+        }
+      }
+    }
+  }
+}`)
+
+	code, stdout, stderr := executeForTest("lint", root)
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stdout=%s stderr=%s", code, exitSuccess, stdout, stderr)
+	}
+}
+
+func TestLintDirectoryValidSampleJSONLReturnsSuccess(t *testing.T) {
+	root := t.TempDir()
+	writeFileAt(t, root, "samples.jsonl", "{\"status\":\"ok\"}\n{\"status\":\"error\"}\n")
+
+	code, stdout, stderr := executeForTest("lint", root)
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stdout=%s stderr=%s", code, exitSuccess, stdout, stderr)
+	}
+}
+
 func executeForTest(args ...string) (int, string, string) {
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer

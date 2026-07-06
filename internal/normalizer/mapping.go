@@ -200,17 +200,5 @@ func joinPath(parentPath, name string) string {
 }
 
 func pointerJoin(base string, segments ...string) string {
-	parts := make([]string, 0, len(segments)+1)
-	if base != "" {
-		parts = append(parts, strings.TrimPrefix(base, "/"))
-	}
-	for _, segment := range segments {
-		parts = append(parts, escapeJSONPointer(segment))
-	}
-	return "/" + strings.Join(parts, "/")
-}
-
-func escapeJSONPointer(segment string) string {
-	segment = strings.ReplaceAll(segment, "~", "~0")
-	return strings.ReplaceAll(segment, "/", "~1")
+	return model.AppendJSONPointer(base, segments...)
 }

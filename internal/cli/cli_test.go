@@ -128,6 +128,29 @@ func TestLintFormatJSONWithSIL001Finding(t *testing.T) {
 	}
 }
 
+func TestLintFormatJSONWithWrappedSIL001Finding(t *testing.T) {
+	path := writeTempFile(t, "wrapped.json", wrappedMappingJSONWithFields(1000))
+	code, stdout, stderr := executeForTest("lint", "--mapping", path, "--format", "json")
+	if code != exitFindings {
+		t.Fatalf("Execute returned %d, want %d; stderr=%s", code, exitFindings, stderr)
+	}
+
+	var result model.RunResult
+	if err := json.Unmarshal([]byte(stdout), &result); err != nil {
+		t.Fatalf("stdout is not valid JSON: %v\n%s", err, stdout)
+	}
+	if len(result.Findings) != 1 {
+		t.Fatalf("findings length = %d, want 1", len(result.Findings))
+	}
+	finding := result.Findings[0]
+	if finding.ID != "SIL001" {
+		t.Fatalf("finding ID = %q, want SIL001", finding.ID)
+	}
+	if finding.JSONPointer != "/mappings" {
+		t.Fatalf("finding JSON pointer = %q, want /mappings", finding.JSONPointer)
+	}
+}
+
 func TestLintSIL001FixtureExpectedJSONReports(t *testing.T) {
 	originalWD, err := os.Getwd()
 	if err != nil {
@@ -467,6 +490,45 @@ func TestLintFormatJSONWithSIL002Finding(t *testing.T) {
 	}
 }
 
+func TestLintFormatJSONWithWrappedSIL002Finding(t *testing.T) {
+	path := writeTempFile(t, "wrapped.json", `{
+  "mappings": {
+    "dynamic": true,
+    "properties": {
+      "status": {
+        "type": "keyword"
+      }
+    }
+  }
+}`)
+
+	code, stdout, stderr := executeForTest("lint", "--mapping", path, "--format", "json")
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stderr=%s", code, exitSuccess, stderr)
+	}
+
+	var result model.RunResult
+	if err := json.Unmarshal([]byte(stdout), &result); err != nil {
+		t.Fatalf("stdout is not valid JSON: %v\n%s", err, stdout)
+	}
+	if result.Summary.Warning != 1 {
+		t.Fatalf("summary.warning = %d, want 1", result.Summary.Warning)
+	}
+	if len(result.Findings) != 1 {
+		t.Fatalf("findings length = %d, want 1", len(result.Findings))
+	}
+	finding := result.Findings[0]
+	if finding.ID != "SIL002" {
+		t.Fatalf("finding ID = %q, want SIL002", finding.ID)
+	}
+	if finding.JSONPointer != "/mappings/dynamic" {
+		t.Fatalf("finding JSON pointer = %q, want /mappings/dynamic", finding.JSONPointer)
+	}
+	if finding.Severity != model.SeverityWarning {
+		t.Fatalf("finding severity = %q, want %q", finding.Severity, model.SeverityWarning)
+	}
+}
+
 func TestLintInvalidFailOnReturnsUsageError(t *testing.T) {
 	path := writeTempFile(t, "mapping.json", `{"properties":{"status":{"type":"keyword"}}}`)
 
@@ -529,6 +591,19 @@ func mappingJSONWithFields(count int) string {
 		fmt.Fprintf(&builder, "%q:{\"type\":\"keyword\"}", fmt.Sprintf("field_%04d", i))
 	}
 	builder.WriteString(`}}`)
+	return builder.String()
+}
+
+func wrappedMappingJSONWithFields(count int) string {
+	var builder strings.Builder
+	builder.WriteString(`{"mappings":{"properties":{`)
+	for i := 0; i < count; i++ {
+		if i > 0 {
+			builder.WriteByte(',')
+		}
+		fmt.Fprintf(&builder, "%q:{\"type\":\"keyword\"}", fmt.Sprintf("field_%04d", i))
+	}
+	builder.WriteString(`}}}`)
 	return builder.String()
 }
 

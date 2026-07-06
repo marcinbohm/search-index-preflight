@@ -27,7 +27,7 @@ func (r sil002RootDynamicEnabled) Metadata() Metadata {
 func (r sil002RootDynamicEnabled) Check(ctx Context, corpus model.Corpus) ([]model.Finding, error) {
 	var findings []model.Finding
 	for _, mapping := range corpus.Mappings {
-		if finding, ok := r.checkMapping(mapping, dynamicPointer(mapping.JSONPointer), "Root dynamic mapping is explicitly enabled. Unexpected fields may expand the mapping."); ok {
+		if finding, ok := r.checkMapping(mapping, model.AppendJSONPointer(mapping.JSONPointer, "dynamic"), "Root dynamic mapping is explicitly enabled. Unexpected fields may expand the mapping."); ok {
 			findings = append(findings, finding)
 		}
 	}
@@ -48,13 +48,6 @@ func (r sil002RootDynamicEnabled) Check(ctx Context, corpus model.Corpus) ([]mod
 		}
 	}
 	return findings, nil
-}
-
-func dynamicPointer(mappingPointer string) string {
-	if mappingPointer == "" {
-		return "/dynamic"
-	}
-	return mappingPointer + "/dynamic"
 }
 
 func (r sil002RootDynamicEnabled) checkMapping(mapping model.Mapping, pointer string, message string) (model.Finding, bool) {

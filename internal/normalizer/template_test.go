@@ -64,6 +64,9 @@ func TestNormalizeIndexTemplate(t *testing.T) {
 	if template.Template.Mappings == nil {
 		t.Fatal("template mappings is nil")
 	}
+	if template.Template.Mappings.JSONPointer != "/template/mappings" {
+		t.Fatalf("mapping JSON pointer = %q, want /template/mappings", template.Template.Mappings.JSONPointer)
+	}
 	if template.Template.Mappings.Dynamic != model.DynamicSettingStrict {
 		t.Fatalf("mapping dynamic = %q, want strict", template.Template.Mappings.Dynamic)
 	}
@@ -119,6 +122,9 @@ func TestNormalizeComponentTemplate(t *testing.T) {
 	}
 	if template.Template.Mappings == nil {
 		t.Fatal("template mappings is nil")
+	}
+	if template.Template.Mappings.JSONPointer != "/template/mappings" {
+		t.Fatalf("mapping JSON pointer = %q, want /template/mappings", template.Template.Mappings.JSONPointer)
 	}
 	field := requireField(t, template.Template.Mappings.Properties, "service.name")
 	if field.Parameters["normalizer"] != "lowercase" {

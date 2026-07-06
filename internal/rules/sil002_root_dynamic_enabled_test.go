@@ -45,6 +45,16 @@ func TestSIL002StandaloneMappingDynamicStrict(t *testing.T) {
 	}
 }
 
+func TestSIL002StandaloneMappingDynamicRuntime(t *testing.T) {
+	findings := runSIL002(t, model.Mapping{
+		Source:  testSource("mapping.json"),
+		Dynamic: model.DynamicSettingRuntime,
+	})
+	if len(findings) != 0 {
+		t.Fatalf("SIL002 returned findings %#v, want none", findings)
+	}
+}
+
 func TestSIL002StandaloneMappingDynamicUnspecified(t *testing.T) {
 	findings := runSIL002(t, model.Mapping{
 		Source:  testSource("mapping.json"),

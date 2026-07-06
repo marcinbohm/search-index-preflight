@@ -12,6 +12,7 @@ const (
 
 type Mapping struct {
 	Source           Source
+	JSONPointer      string
 	Dynamic          DynamicSetting
 	DateDetection    *bool
 	NumericDetection *bool

@@ -64,6 +64,9 @@ func TestNormalizeRawMapping(t *testing.T) {
 	if mapping.Dynamic != model.DynamicSettingStrict {
 		t.Fatalf("Dynamic = %q, want %q", mapping.Dynamic, model.DynamicSettingStrict)
 	}
+	if mapping.JSONPointer != "" {
+		t.Fatalf("mapping JSON pointer = %q, want empty root pointer", mapping.JSONPointer)
+	}
 
 	status := requireField(t, mapping.Properties, "status")
 	if status.Path != "status" {
@@ -131,6 +134,9 @@ func TestNormalizeWrappedMapping(t *testing.T) {
 	mapping := NormalizeMapping(document)
 	if len(mapping.Diagnostics) != 0 {
 		t.Fatalf("NormalizeMapping returned diagnostics: %#v", mapping.Diagnostics)
+	}
+	if mapping.JSONPointer != "/mappings" {
+		t.Fatalf("mapping JSON pointer = %q, want /mappings", mapping.JSONPointer)
 	}
 	status := requireField(t, mapping.Properties, "status")
 	if status.JSONPointer != "/mappings/properties/status" {

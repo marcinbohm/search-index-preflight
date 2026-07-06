@@ -20,11 +20,12 @@ Implemented foundations:
 - canonical `model.Corpus`
 - normalized field traversal helpers
 - rule registry and runner foundation
-- first built-in rule: SIL001 total fields limit risk
+- built-in rule: SIL001 total fields limit risk
+- built-in rule: SIL002 root dynamic enabled
 
 Not implemented:
 
-- SIL002 and the rest of the rule catalog
+- SIL003 and the rest of the rule catalog
 - YAML
 - config loading
 - suppressions
@@ -34,7 +35,7 @@ Not implemented:
 - diff
 - cluster mode
 
-Next expected sprint should either harden SIL001 with fixtures/report coverage or implement the next small rule. Do not reimplement parser, normalizer, corpus, traversal, or rule-runner foundations.
+Next expected sprint should either harden implemented rule fixtures/report coverage or implement the next small rule. Do not reimplement parser, normalizer, corpus, traversal, or rule-runner foundations.
 
 ## Working rules
 

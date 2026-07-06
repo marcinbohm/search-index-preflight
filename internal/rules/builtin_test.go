@@ -6,18 +6,21 @@ import (
 	"github.com/marcinbohm/search-index-lint/internal/model"
 )
 
-func TestBuiltinRegistryContainsOnlySIL001(t *testing.T) {
+func TestBuiltinRegistryContainsOnlySIL001AndSIL002(t *testing.T) {
 	registry, err := BuiltinRegistry()
 	if err != nil {
 		t.Fatalf("BuiltinRegistry returned error: %v", err)
 	}
 
 	rules := registry.List()
-	if len(rules) != 1 {
-		t.Fatalf("BuiltinRegistry returned %d rules, want 1", len(rules))
+	if len(rules) != 2 {
+		t.Fatalf("BuiltinRegistry returned %d rules, want 2", len(rules))
 	}
 	if rules[0].Metadata().ID != "SIL001" {
 		t.Fatalf("built-in rule ID = %q, want SIL001", rules[0].Metadata().ID)
+	}
+	if rules[1].Metadata().ID != "SIL002" {
+		t.Fatalf("built-in rule ID = %q, want SIL002", rules[1].Metadata().ID)
 	}
 }
 

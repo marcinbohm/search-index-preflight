@@ -127,13 +127,17 @@ Not allowed:
 
 ## Current fixture packs
 
-The first public fixture pack is:
+Current public fixture packs:
 
 ```text
 fixtures/mapping-limits/sil001-total-fields-limit/
+fixtures/dynamic-mapping/sil002-root-dynamic-enabled/
 ```
 
-It covers the implemented `SIL001` default-threshold behavior with synthetic near-limit and over-limit mappings plus expected JSON reports.
+They cover:
+
+- `SIL001` default-threshold behavior with synthetic near-limit and over-limit mappings plus expected JSON reports
+- `SIL002` root-level explicit `dynamic: true` behavior with synthetic mappings and an expected JSON report
 
 ## Expected output
 

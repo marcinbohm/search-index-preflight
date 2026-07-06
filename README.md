@@ -10,7 +10,7 @@ It is designed for teams that treat search schemas as code and want PR-time feed
 
 Status: pre-alpha / foundation phase.
 
-The current CLI is not production-ready. It can parse and normalize JSON mappings/templates and JSONL/NDJSON sample documents, run the first built-in rule (`SIL001`), and report diagnostics/findings. Rule coverage is intentionally very limited.
+The current CLI is not production-ready. It can parse and normalize JSON mappings/templates and JSONL/NDJSON sample documents, run the first built-in rules (`SIL001`, `SIL002`), and report diagnostics/findings. Rule coverage is intentionally very limited.
 
 ## Problem statement
 
@@ -83,7 +83,7 @@ go run ./cmd/search-index-lint lint --mapping examples/basic/mapping.json
 
 ## Current Usage
 
-Current pre-alpha behavior parses JSON mappings/templates and JSONL/NDJSON sample documents, normalizes supported schema shapes into internal models, runs `SIL001`, then reports parse/normalization diagnostics and rule findings.
+Current pre-alpha behavior parses JSON mappings/templates and JSONL/NDJSON sample documents, normalizes supported schema shapes into internal models, runs `SIL001` and `SIL002`, then reports parse/normalization diagnostics and rule findings.
 
 ```bash
 search-index-lint lint --mapping mapping.json
@@ -160,10 +160,11 @@ Included now:
 - rule registry skeleton
 - rule runner foundation
 - first built-in rule: `SIL001` total fields limit risk
+- second built-in rule: `SIL002` root dynamic enabled heuristic warning
 
 Not implemented yet:
 
-- SIL002 and the rest of the rule catalog
+- SIL003 and the rest of the rule catalog
 - YAML parsing
 - Markdown reporter
 - SARIF reporter
@@ -202,7 +203,7 @@ Included:
 Initial MVP rules:
 
 - SIL001 total-fields-limit-risk (implemented, limited default-threshold version)
-- SIL002 root-dynamic-enabled
+- SIL002 root-dynamic-enabled (implemented, root-level explicit `dynamic: true` only)
 - SIL003 dynamic-template-missing-match-mapping-type
 - SIL004 overbroad-dynamic-template
 - SIL005 dynamic-template-shadowing
@@ -297,7 +298,7 @@ Current phase:
 - canonical corpus model
 - normalized field traversal helpers
 - rule runner foundation
-- first built-in rule: `SIL001`
+- built-in rules: `SIL001`, `SIL002`
 - parse, normalization, and rule finding reporting
 
 No production release exists yet.

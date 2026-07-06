@@ -1,0 +1,32 @@
+{
+  "schema_version": "0.1",
+  "tool": {
+    "name": "SearchIndexLint",
+    "version": "0.0.0-dev"
+  },
+  "summary": {
+    "files_scanned": 1,
+    "findings_total": 1,
+    "critical": 0,
+    "error": 0,
+    "warning": 1,
+    "info": 0,
+    "exit_code": 0
+  },
+  "findings": [
+    {
+      "id": "SIL002",
+      "name": "root-dynamic-enabled",
+      "severity": "warning",
+      "confidence": "medium",
+      "category": "dynamic-mapping",
+      "determinism": "heuristic",
+      "file": "fixtures/dynamic-mapping/sil002-root-dynamic-enabled/mapping-root-dynamic-true.json",
+      "json_pointer": "/dynamic",
+      "message": "Root dynamic mapping is explicitly enabled. Unexpected fields may expand the mapping.",
+      "remediation": "Use explicit mappings for known fields. Consider dynamic: strict or dynamic: false for controlled schemas, or scope dynamic behavior to known safe objects. Keep dynamic enabled only when the expansion risk is intentional and reviewed.",
+      "fingerprint": "SIL002:fixtures/dynamic-mapping/sil002-root-dynamic-enabled/mapping-root-dynamic-true.json:/dynamic"
+    }
+  ],
+  "diagnostics": []
+}

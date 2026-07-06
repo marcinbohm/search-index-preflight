@@ -14,12 +14,13 @@ Current `lint` behavior:
 - discovers `.json`, `.jsonl`, and `.ndjson` files in directory mode
 - supports `--format console|json`
 - reports parse and normalization diagnostics
-- runs the built-in rule registry with `SIL001`
+- runs the built-in rule registry with `SIL001` and `SIL002`
 - emits findings for `SIL001` total fields limit risk
+- emits heuristic warning findings for `SIL002` root dynamic enabled
 
 Planned but not implemented:
 
-- SIL002 and the rest of the rule catalog
+- SIL003 and the rest of the rule catalog
 - YAML input
 - Markdown output
 - SARIF output

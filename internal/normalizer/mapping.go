@@ -26,8 +26,9 @@ func NormalizeMapping(document model.RawDocument) model.Mapping {
 
 func normalizeMappingObject(source model.Source, object map[string]any, pointer string) model.Mapping {
 	mapping := model.Mapping{
-		Source:  source,
-		Dynamic: parseDynamicSetting(object["dynamic"]),
+		Source:      source,
+		JSONPointer: pointer,
+		Dynamic:     parseDynamicSetting(object["dynamic"]),
 	}
 	mapping.DateDetection = boolPointer(object["date_detection"])
 	mapping.NumericDetection = boolPointer(object["numeric_detection"])

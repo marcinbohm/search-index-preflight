@@ -39,7 +39,7 @@ Deterministic findings may fail CI by default if severity is `error` or higher. 
 | ID | Name | Category | Stage | Severity | Determinism | FP risk |
 |---|---|---|---|---|---|---|
 | SIL001 | total-fields-limit-risk | mapping-limits | MVP implemented | error when exceeded; warning near threshold | deterministic | low |
-| SIL002 | root-dynamic-enabled | dynamic-mapping | MVP | warning | heuristic | medium |
+| SIL002 | root-dynamic-enabled | dynamic-mapping | MVP implemented | warning | heuristic | medium |
 | SIL003 | dynamic-template-missing-match-mapping-type | dynamic-templates | MVP | warning | deterministic detection; heuristic risk | medium |
 | SIL004 | overbroad-dynamic-template | dynamic-templates | MVP | warning | heuristic | medium |
 | SIL005 | dynamic-template-shadowing | dynamic-templates | MVP | warning | deterministic in simple cases; heuristic for wildcards | medium |
@@ -107,23 +107,24 @@ ID: SIL002
 Name: root-dynamic-enabled  
 Category: dynamic-mapping  
 Description: Detect root-level `dynamic: true`.  
-Why it matters: This pattern can create rollout, indexing, search correctness, compatibility, or operational reliability risk.  
+Why it matters: Root `dynamic: true` can allow unexpected fields to expand a mapping. This may be intentional, but it should be reviewed because field growth can create operational risk.  
 Applies to: Elasticsearch/OpenSearch unless the selected dialect says otherwise.  
 Input required: mapping or template  
 Deterministic vs heuristic: heuristic  
 Default severity: warning  
 False positive risk: medium  
 Stage: MVP  
+Implementation status: implemented in pre-alpha. Checks only explicit root-level `dynamic: true` on standalone mappings and template mappings. Does not inspect child object dynamic settings, estimate dynamic expansion, or evaluate dynamic templates.
 
 Bad input:
 
 ```text
-TBD minimal fixture example for SIL002.
+fixtures/dynamic-mapping/sil002-root-dynamic-enabled/mapping-root-dynamic-true.json
 ```
 
 Remediation:
 
-Use explicit mappings or `dynamic: strict`; scope dynamic behavior narrowly.
+Use explicit mappings for known fields. Consider `dynamic: strict` or `dynamic: false` for controlled schemas, or scope dynamic behavior to known safe objects. Keep dynamic enabled only when the expansion risk is intentional and reviewed.
 
 References: TBD
 

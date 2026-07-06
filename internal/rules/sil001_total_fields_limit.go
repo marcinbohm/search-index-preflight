@@ -32,7 +32,7 @@ func (r sil001TotalFieldsLimit) Metadata() Metadata {
 func (r sil001TotalFieldsLimit) Check(ctx Context, corpus model.Corpus) ([]model.Finding, error) {
 	var findings []model.Finding
 	for _, mapping := range corpus.Mappings {
-		if finding, ok := r.checkMapping(mapping, ""); ok {
+		if finding, ok := r.checkMapping(mapping, mapping.JSONPointer); ok {
 			findings = append(findings, finding)
 		}
 	}

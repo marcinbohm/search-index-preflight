@@ -210,6 +210,7 @@ Current behavior:
 - lists public diff rule metadata for `DIF001`, `DIF002`, and `DIF003`
 - console output includes ID, family, severity, category, and name
 - JSON output includes ID, family, name, category, severity, confidence, determinism, and description
+- shows compact rule metadata, not a full conditional severity table; for example, `SIL001` metadata is `warning`, but findings are `warning` near the field-count limit and `error` when the limit is exceeded
 - does not run rules or inspect input files
 
 ## Input formats

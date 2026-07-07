@@ -47,6 +47,14 @@ func TestRulesListConsoleListsAllPublicRules(t *testing.T) {
 	}
 }
 
+func TestRulesListConsoleOrdersLintRulesBeforeDiffRules(t *testing.T) {
+	code, stdout, stderr := executeForTest("rules", "list")
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stderr=%s", code, exitSuccess, stderr)
+	}
+	assertContainsInOrder(t, stdout, "SIL001", "SIL002", "SIL003", "DIF001", "DIF002", "DIF003")
+}
+
 func TestRulesListFamilyLint(t *testing.T) {
 	code, stdout, stderr := executeForTest("rules", "list", "--family", "lint")
 	if code != exitSuccess {
@@ -60,6 +68,36 @@ func TestRulesListFamilyLint(t *testing.T) {
 	for _, text := range []string{"DIF001", "DIF002", "DIF003"} {
 		if strings.Contains(stdout, text) {
 			t.Fatalf("stdout %q contains unexpected %q", stdout, text)
+		}
+	}
+}
+
+func TestRulesListFamilyLintFormatJSON(t *testing.T) {
+	code, stdout, stderr := executeForTest("rules", "list", "--family", "lint", "--format", "json")
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stderr=%s", code, exitSuccess, stderr)
+	}
+
+	var output ruleListOutput
+	if err := json.Unmarshal([]byte(stdout), &output); err != nil {
+		t.Fatalf("stdout is not valid JSON: %v\n%s", err, stdout)
+	}
+	if len(output.Rules) != 3 {
+		t.Fatalf("rules length = %d, want 3", len(output.Rules))
+	}
+	wantIDs := []string{"SIL001", "SIL002", "SIL003"}
+	if got := ruleListIDs(output.Rules); fmt.Sprint(got) != fmt.Sprint(wantIDs) {
+		t.Fatalf("rule IDs = %#v, want %#v", got, wantIDs)
+	}
+	for _, rule := range output.Rules {
+		if rule.Family != "lint" {
+			t.Fatalf("rule family = %q, want lint for %#v", rule.Family, rule)
+		}
+		if rule.ID == "" || rule.Name == "" || rule.Category == "" || rule.Severity == "" || rule.Confidence == "" || rule.Determinism == "" || rule.Description == "" {
+			t.Fatalf("rule has empty metadata field: %#v", rule)
+		}
+		if strings.HasPrefix(rule.ID, "DIF") {
+			t.Fatalf("lint family output contains diff rule: %#v", rule)
 		}
 	}
 }
@@ -1810,6 +1848,18 @@ func ruleListIDs(rules []ruleListItemForTest) []string {
 		ids = append(ids, rule.ID)
 	}
 	return ids
+}
+
+func assertContainsInOrder(t *testing.T, text string, tokens ...string) {
+	t.Helper()
+	offset := 0
+	for _, token := range tokens {
+		index := strings.Index(text[offset:], token)
+		if index < 0 {
+			t.Fatalf("text %q does not contain %q after offset %d", text, token, offset)
+		}
+		offset += index + len(token)
+	}
 }
 
 func readExpectedFinding(t *testing.T, path string) expectedFindingFixture {

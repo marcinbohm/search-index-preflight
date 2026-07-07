@@ -36,7 +36,7 @@ Deterministic findings may fail CI by default if severity is `error` or higher. 
 
 ## Summary
 
-`SIL001` through `SIL003` are currently implemented static checks. Further static rule expansion is paused while the diff/preflight foundation is introduced. `DIF001`, `DIF002`, and `DIF003` are implemented for the minimal public `diff` command, but they are not emitted by `lint`. `search-index-preflight rules list` lists public metadata for these lint and diff rules. Existing rule IDs remain stable and were not renamed during the SearchIndexPreflight transition.
+`SIL001` through `SIL003` are currently implemented static checks. Further static rule expansion is paused while the diff/preflight foundation is introduced. `DIF001`, `DIF002`, and `DIF003` are implemented for the minimal public `diff` command, but they are not emitted by `lint`. `search-index-preflight rules list` lists public metadata for these lint and diff rules. The severity shown by `rules list` is compact rule metadata; rule-specific sections below document conditional severities where applicable. Existing rule IDs remain stable and were not renamed during the SearchIndexPreflight transition.
 
 | ID | Name | Category | Stage | Severity | Determinism | FP risk |
 |---|---|---|---|---|---|---|
@@ -99,6 +99,8 @@ Default severity: error when exceeded; warning near threshold
 False positive risk: low  
 Stage: MVP  
 Implementation status: implemented in pre-alpha with default limit `1000` and warning threshold `800`. Counts explicit normalized properties, multi-fields, and runtime fields per standalone mapping/template mapping. Does not estimate dynamic expansion, compose component templates, read cluster state, or read config yet.
+
+`rules list` reports SIL001 metadata severity as `warning`, but SIL001 findings are `warning` near the field-count limit and `error` when the limit is exceeded.
 
 Bad input:
 

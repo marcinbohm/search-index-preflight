@@ -97,6 +97,7 @@ search-index-preflight lint --sample-docs samples.ndjson
 search-index-preflight lint --mapping mapping.json --sample-docs samples.jsonl
 search-index-preflight lint ./schemas
 search-index-preflight diff --base old-schemas/ --current new-schemas/
+search-index-preflight diff --base fixtures/diff/dif001-field-type-changed/base --current fixtures/diff/dif001-field-type-changed/current
 search-index-preflight rules list
 search-index-preflight explain SIL001
 ```

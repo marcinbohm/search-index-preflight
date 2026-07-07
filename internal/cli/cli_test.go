@@ -710,6 +710,69 @@ func TestDiffDirectorySameRelativePathEmitsDIF001(t *testing.T) {
 	}
 }
 
+func TestDiffDIF001FixtureEmitsFinding(t *testing.T) {
+	base := fixturePath("diff", "dif001-field-type-changed", "base")
+	current := fixturePath("diff", "dif001-field-type-changed", "current")
+
+	code, stdout, stderr := executeForTest("diff", "--base", base, "--current", current)
+	if code != exitFindings {
+		t.Fatalf("Execute returned %d, want %d; stdout=%s stderr=%s", code, exitFindings, stdout, stderr)
+	}
+	for _, text := range []string{"DIF001", "mapping.json", "status", "keyword", "long"} {
+		if !strings.Contains(stdout, text) {
+			t.Fatalf("stdout %q does not contain %q", stdout, text)
+		}
+	}
+}
+
+func TestDiffDIF001FixtureJSONMatchesExpectedFindingFields(t *testing.T) {
+	base := fixturePath("diff", "dif001-field-type-changed", "base")
+	current := fixturePath("diff", "dif001-field-type-changed", "current")
+	expected := readExpectedFinding(t, fixturePath("diff", "dif001-field-type-changed", "expected.finding.json"))
+
+	code, stdout, stderr := executeForTest("diff", "--base", base, "--current", current, "--format", "json")
+	if code != exitFindings {
+		t.Fatalf("Execute returned %d, want %d; stdout=%s stderr=%s", code, exitFindings, stdout, stderr)
+	}
+
+	var result model.RunResult
+	if err := json.Unmarshal([]byte(stdout), &result); err != nil {
+		t.Fatalf("stdout is not valid JSON: %v\n%s", err, stdout)
+	}
+	if result.Summary.FindingsTotal != 1 {
+		t.Fatalf("findings_total = %d, want 1", result.Summary.FindingsTotal)
+	}
+	if result.Summary.Error != 1 {
+		t.Fatalf("summary.error = %d, want 1", result.Summary.Error)
+	}
+	if result.Summary.ExitCode != exitFindings {
+		t.Fatalf("summary.exit_code = %d, want %d", result.Summary.ExitCode, exitFindings)
+	}
+	if len(result.Diagnostics) != 0 {
+		t.Fatalf("diagnostics length = %d, want 0", len(result.Diagnostics))
+	}
+	if result.Diagnostics == nil {
+		t.Fatal("diagnostics is nil, want empty slice")
+	}
+	if len(result.Findings) != 1 {
+		t.Fatalf("findings length = %d, want 1", len(result.Findings))
+	}
+	assertFindingMatchesExpected(t, result.Findings[0], expected)
+}
+
+func TestDiffNoChangesFixtureReturnsSuccess(t *testing.T) {
+	base := fixturePath("diff", "no-changes", "base")
+	current := fixturePath("diff", "no-changes", "current")
+
+	code, stdout, stderr := executeForTest("diff", "--base", base, "--current", current)
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stdout=%s stderr=%s", code, exitSuccess, stdout, stderr)
+	}
+	if !strings.Contains(stdout, "no diagnostics or findings") {
+		t.Fatalf("stdout %q does not report clean diff", stdout)
+	}
+}
+
 func TestDiffDirectoryDifferentFilenamesDoesNotAlignAsTypeChange(t *testing.T) {
 	root := t.TempDir()
 	baseDir := filepath.Join(root, "old")
@@ -1002,6 +1065,61 @@ func writeFileAt(t *testing.T, root, name, content string) {
 	if err := os.WriteFile(path, []byte(content), 0o644); err != nil {
 		t.Fatalf("WriteFile returned error: %v", err)
 	}
+}
+
+type expectedFindingFixture struct {
+	ID              string   `json:"id"`
+	Name            string   `json:"name"`
+	Severity        string   `json:"severity"`
+	Category        string   `json:"category"`
+	File            string   `json:"file"`
+	JSONPointer     string   `json:"json_pointer"`
+	MessageContains []string `json:"message_contains"`
+}
+
+func readExpectedFinding(t *testing.T, path string) expectedFindingFixture {
+	t.Helper()
+	content, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("ReadFile returned error: %v", err)
+	}
+	var expected expectedFindingFixture
+	if err := json.Unmarshal(content, &expected); err != nil {
+		t.Fatalf("expected finding fixture is invalid JSON: %v", err)
+	}
+	return expected
+}
+
+func assertFindingMatchesExpected(t *testing.T, finding model.Finding, expected expectedFindingFixture) {
+	t.Helper()
+	if finding.ID != expected.ID {
+		t.Fatalf("finding ID = %q, want %q", finding.ID, expected.ID)
+	}
+	if finding.Name != expected.Name {
+		t.Fatalf("finding name = %q, want %q", finding.Name, expected.Name)
+	}
+	if string(finding.Severity) != expected.Severity {
+		t.Fatalf("finding severity = %q, want %q", finding.Severity, expected.Severity)
+	}
+	if finding.Category != expected.Category {
+		t.Fatalf("finding category = %q, want %q", finding.Category, expected.Category)
+	}
+	if finding.File != expected.File {
+		t.Fatalf("finding file = %q, want %q", finding.File, expected.File)
+	}
+	if finding.JSONPointer != expected.JSONPointer {
+		t.Fatalf("finding JSON pointer = %q, want %q", finding.JSONPointer, expected.JSONPointer)
+	}
+	for _, text := range expected.MessageContains {
+		if !strings.Contains(finding.Message, text) {
+			t.Fatalf("finding message %q does not contain %q", finding.Message, text)
+		}
+	}
+}
+
+func fixturePath(parts ...string) string {
+	all := append([]string{"..", "..", "fixtures"}, parts...)
+	return filepath.Join(all...)
 }
 
 func mappingJSONWithFields(count int) string {

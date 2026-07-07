@@ -1,0 +1,13 @@
+{
+  "id": "DIF001",
+  "name": "field-type-changed",
+  "severity": "error",
+  "category": "schema-diff",
+  "file": "mapping.json",
+  "json_pointer": "/properties/status",
+  "message_contains": [
+    "status",
+    "keyword",
+    "long"
+  ]
+}

@@ -151,6 +151,7 @@ Examples:
 ```bash
 search-index-preflight diff --base old/ --current new/
 search-index-preflight diff --base old/mapping.json --current new/mapping.json --format json
+search-index-preflight diff --base fixtures/diff/dif001-field-type-changed/base --current fixtures/diff/dif001-field-type-changed/current
 ```
 
 Flags:

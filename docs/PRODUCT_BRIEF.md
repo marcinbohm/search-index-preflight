@@ -1,10 +1,10 @@
-# Product Brief: SearchIndexLint
+# Product Brief: SearchIndexPreflight
 
 ## Product vision
 
-SearchIndexLint helps engineering teams catch Elasticsearch/OpenSearch schema and template rollout risks before they reach production.
+SearchIndexPreflight helps engineering teams catch Elasticsearch/OpenSearch schema and template rollout risks before they reach production.
 
-The product is evolving toward SearchIndexPreflight: a preflight safety CLI for Elasticsearch/OpenSearch schema changes.
+SearchIndexPreflight is a preflight safety CLI for Elasticsearch/OpenSearch schema changes.
 
 The current implementation is an offline-first CLI for linting:
 
@@ -18,7 +18,7 @@ The next strategic focus is diff-first schema change analysis: comparing a base 
 
 The core idea is simple: search schema changes should be reviewable, testable, and enforceable in CI the same way application code and infrastructure code are.
 
-SearchIndexLint should become a practical guardrail for search infrastructure reliability, not a demo project and not a generic JSON validator.
+SearchIndexPreflight should become a practical guardrail for search infrastructure reliability, not a demo project and not a generic JSON validator.
 
 ## Problem statement
 
@@ -61,15 +61,15 @@ Secondary users:
 
 ### PR-time schema preflight
 
-A developer changes an index template or mapping. SearchIndexLint runs in CI and reports static risks today. Future SearchIndexPreflight diff mode should compare old and new schema states and report change-specific risks before merge.
+A developer changes an index template or mapping. SearchIndexPreflight runs in CI and reports static risks today. Future SearchIndexPreflight diff mode should compare old and new schema states and report change-specific risks before merge.
 
 ### Offline mapping/template risk review
 
-A maintainer runs SearchIndexLint locally before applying templates to a cluster.
+A maintainer runs SearchIndexPreflight locally before applying templates to a cluster.
 
 ```bash
-search-index-lint lint ./schemas
-search-index-lint lint --template logs.index-template.json
+search-index-preflight lint ./schemas
+search-index-preflight lint --template logs.index-template.json
 ```
 
 ### Future schema change diff
@@ -84,15 +84,15 @@ This is planned future behavior, not implemented today.
 
 ### Sample document compatibility checks
 
-A team maintains sample payloads alongside mappings. SearchIndexLint verifies whether sample documents match declared schema expectations.
+A team maintains sample payloads alongside mappings. SearchIndexPreflight verifies whether sample documents match declared schema expectations.
 
 ### Template precedence checks
 
-A platform repository contains multiple index templates and component templates. SearchIndexLint detects likely precedence and composition issues before rollout.
+A platform repository contains multiple index templates and component templates. SearchIndexPreflight detects likely precedence and composition issues before rollout.
 
 ### CI-friendly reports
 
-SearchIndexLint currently emits console and JSON reports. Markdown and SARIF are planned future report formats.
+SearchIndexPreflight currently emits console and JSON reports. Markdown and SARIF are planned future report formats.
 
 ## Secondary use cases
 
@@ -105,7 +105,7 @@ SearchIndexLint currently emits console and JSON reports. Markdown and SARIF are
 
 ## Non-goals
 
-SearchIndexLint is not a SaaS product, dashboard, OpenSearch Dashboards plugin, mapping generator, schema migration framework, automatic fixer, replacement for staging/load tests, or a tool that writes to clusters. Future doctor mode must be read-only.
+SearchIndexPreflight is not a SaaS product, dashboard, OpenSearch Dashboards plugin, mapping generator, schema migration framework, automatic fixer, replacement for staging/load tests, or a tool that writes to clusters. Future doctor mode must be read-only.
 
 ## User stories
 
@@ -144,9 +144,9 @@ As an SRE, I want suppressions and baselines, so that legacy issues do not block
 
 ## Positioning
 
-SearchIndexLint is offline-first, CI-first, schema-as-code oriented, rule-based, explainable, Elasticsearch/OpenSearch aware, conservative about heuristics, and designed for infrastructure teams. The planned SearchIndexPreflight direction makes change safety, especially diff-based preflight checks, the primary product focus.
+SearchIndexPreflight is offline-first, CI-first, schema-as-code oriented, rule-based, explainable, Elasticsearch/OpenSearch aware, conservative about heuristics, and designed for infrastructure teams. Change safety, especially future diff-based preflight checks, is the primary product focus.
 
-> SearchIndexLint catches Elasticsearch/OpenSearch schema and template risks before they hit production.
+> SearchIndexPreflight catches Elasticsearch/OpenSearch schema and template risks before they hit production.
 
 Future positioning:
 
@@ -168,4 +168,4 @@ Future positioning:
 - Exact initial license: recommended Apache-2.0, maintainer to confirm.
 - Exact initial Elasticsearch version matrix: TBD before alpha.
 - Exact initial OpenSearch version matrix: TBD before alpha.
-- Whether JSON Schema for `search-index-lint.yaml` ships in alpha or beta: TBD.
+- Whether JSON Schema for `search-index-preflight.yaml` ships in alpha or beta: TBD.

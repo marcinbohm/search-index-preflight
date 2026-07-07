@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-SearchIndexLint has no stable release yet.
+SearchIndexPreflight has no stable release yet.
 
 | Version | Supported |
 |---|---|
@@ -23,7 +23,7 @@ Do not include production mappings, cluster URLs, credentials, tokens, customer 
 
 ## Tool security model
 
-SearchIndexLint is designed to be offline-first.
+SearchIndexPreflight is designed to be offline-first.
 
 The default `lint` command must not:
 
@@ -47,7 +47,7 @@ When reporting bugs, prefer minimal synthetic reproduction, redacted field names
 
 ## Handling sample documents
 
-SearchIndexLint should avoid printing full sample values by default.
+SearchIndexPreflight should avoid printing full sample values by default.
 
 Findings should truncate long values, avoid printing secrets, include paths and types instead of raw data where possible, and allow verbose mode only when users explicitly request more detail.
 
@@ -57,7 +57,7 @@ Before v1, maintainers should enable Dependabot/Renovate, CodeQL, gosec, OpenSSF
 
 ## Security non-goals
 
-SearchIndexLint is not a secret scanner, vulnerability scanner, cluster hardening scanner, access-control validator, compliance tool, or replacement for security review.
+SearchIndexPreflight is not a secret scanner, vulnerability scanner, cluster hardening scanner, access-control validator, compliance tool, or replacement for security review.
 
 ## Public issue warning
 

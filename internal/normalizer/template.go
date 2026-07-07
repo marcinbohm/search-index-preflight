@@ -1,6 +1,6 @@
 package normalizer
 
-import "github.com/marcinbohm/search-index-lint/internal/model"
+import "github.com/marcinbohm/search-index-preflight/internal/model"
 
 func NormalizeIndexTemplate(document model.RawDocument) model.IndexTemplate {
 	root, ok := asObject(document.Content)

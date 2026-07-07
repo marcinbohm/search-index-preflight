@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Report incorrect behavior in SearchIndexLint
+about: Report incorrect behavior in SearchIndexPreflight
 title: "bug: "
 labels: ["type: bug"]
 assignees: ""
@@ -12,7 +12,7 @@ Describe the bug.
 
 ## Version
 
-SearchIndexLint version:
+SearchIndexPreflight version:
 
 ```text
 TBD
@@ -27,7 +27,7 @@ TBD
 ## Command
 
 ```bash
-search-index-lint lint ...
+search-index-preflight lint ...
 ```
 
 ## Expected behavior
@@ -66,7 +66,7 @@ version: 1
 ## Output
 
 ```text
-Paste SearchIndexLint output here.
+Paste SearchIndexPreflight output here.
 ```
 
 ## Is this a false positive?

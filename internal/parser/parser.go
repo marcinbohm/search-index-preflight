@@ -1,6 +1,6 @@
 package parser
 
-import "github.com/marcinbohm/search-index-lint/internal/model"
+import "github.com/marcinbohm/search-index-preflight/internal/model"
 
 func Parse(source model.Source, kind model.DocumentKind, content []byte) model.RawDocument {
 	// TODO: Add YAML parsing when config/schema YAML support is implemented.

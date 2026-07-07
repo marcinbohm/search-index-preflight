@@ -6,12 +6,12 @@ import (
 	"io"
 	"os"
 
-	"github.com/marcinbohm/search-index-lint/internal/input"
-	"github.com/marcinbohm/search-index-lint/internal/model"
-	"github.com/marcinbohm/search-index-lint/internal/normalizer"
-	"github.com/marcinbohm/search-index-lint/internal/parser"
-	"github.com/marcinbohm/search-index-lint/internal/report"
-	"github.com/marcinbohm/search-index-lint/internal/rules"
+	"github.com/marcinbohm/search-index-preflight/internal/input"
+	"github.com/marcinbohm/search-index-preflight/internal/model"
+	"github.com/marcinbohm/search-index-preflight/internal/normalizer"
+	"github.com/marcinbohm/search-index-preflight/internal/parser"
+	"github.com/marcinbohm/search-index-preflight/internal/report"
+	"github.com/marcinbohm/search-index-preflight/internal/rules"
 )
 
 func runLint(args []string, stdout, stderr io.Writer) int {
@@ -130,7 +130,7 @@ func runLint(args []string, stdout, stderr io.Writer) int {
 
 func writeLintHelp(w io.Writer) {
 	fmt.Fprint(w, `Usage:
-  search-index-lint lint [path] [flags]
+  search-index-preflight lint [path] [flags]
 
 Lint mappings, templates, component templates, and sample documents.
 Runs parsing, normalization, and currently implemented built-in rules.

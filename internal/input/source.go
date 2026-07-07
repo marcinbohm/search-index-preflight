@@ -1,6 +1,6 @@
 package input
 
-import "github.com/marcinbohm/search-index-lint/internal/model"
+import "github.com/marcinbohm/search-index-preflight/internal/model"
 
 type Source struct {
 	Path         string

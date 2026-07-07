@@ -12,7 +12,7 @@ Describe the small, well-scoped task.
 
 ## Context
 
-Explain why this matters for SearchIndexLint.
+Explain why this matters for SearchIndexPreflight.
 
 ## Files likely involved
 

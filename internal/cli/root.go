@@ -41,10 +41,10 @@ func isHelp(arg string) bool {
 }
 
 func writeRootHelp(w io.Writer) {
-	fmt.Fprint(w, strings.TrimSpace(`SearchIndexLint lints Elasticsearch/OpenSearch schemas offline.
+	fmt.Fprint(w, strings.TrimSpace(`SearchIndexPreflight lints Elasticsearch/OpenSearch schemas offline.
 
 Usage:
-  search-index-lint [command]
+  search-index-preflight [command]
 
 Available Commands:
   lint        Lint mappings, templates, and sample documents
@@ -52,6 +52,6 @@ Available Commands:
   explain     Explain a rule by ID
   version     Print version information
 
-Use "search-index-lint <command> --help" for more information about a command.
+Use "search-index-preflight <command> --help" for more information about a command.
 `)+"\n")
 }

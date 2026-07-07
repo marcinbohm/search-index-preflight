@@ -9,7 +9,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/marcinbohm/search-index-lint/internal/model"
+	"github.com/marcinbohm/search-index-preflight/internal/model"
 )
 
 func ParseJSONL(source model.Source, content []byte) model.RawDocument {

@@ -20,7 +20,7 @@ func runExplain(args []string, stdout, stderr io.Writer) int {
 
 func writeExplainHelp(w io.Writer) {
 	fmt.Fprint(w, `Usage:
-  search-index-lint explain [rule-id]
+  search-index-preflight explain [rule-id]
 
 Explain a rule by stable rule ID, for example SIL001.
 Implementation is in progress.

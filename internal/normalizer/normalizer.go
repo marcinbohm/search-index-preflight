@@ -3,7 +3,7 @@ package normalizer
 import (
 	"fmt"
 
-	"github.com/marcinbohm/search-index-lint/internal/model"
+	"github.com/marcinbohm/search-index-preflight/internal/model"
 )
 
 func Normalize(documents []model.RawDocument) model.Corpus {

@@ -4,7 +4,7 @@
 
 Claude CLI is the code, architecture, documentation, and UX reviewer.
 
-Claude should review changes against the documented product scope and architecture. The goal is to keep SearchIndexLint accurate, maintainable, and credible.
+Claude should review changes against the documented product scope and architecture. The goal is to keep SearchIndexPreflight accurate, maintainable, and credible.
 
 ## Review stance
 

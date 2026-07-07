@@ -2,7 +2,7 @@
 
 ## Scope
 
-SearchIndexLint analyzes Elasticsearch/OpenSearch schema artifacts before they are applied to a cluster.
+SearchIndexPreflight analyzes Elasticsearch/OpenSearch schema artifacts before they are applied to a cluster.
 
 Initial artifact types:
 
@@ -19,7 +19,7 @@ The MVP is offline-only. It must not require network access, cluster credentials
 
 Mappings define field types and mapping parameters for documents.
 
-SearchIndexLint should normalize mappings into a canonical tree:
+SearchIndexPreflight should normalize mappings into a canonical tree:
 
 ```text
 Mapping
@@ -66,13 +66,13 @@ Checks:
 - unknown fields in sample docs when strict mapping is expected
 - sample docs that would likely create many new fields
 
-SearchIndexLint cannot know production key cardinality offline. Findings should be framed as risks unless deterministic evidence exists.
+SearchIndexPreflight cannot know production key cardinality offline. Findings should be framed as risks unless deterministic evidence exists.
 
 ## Dynamic templates
 
 Dynamic templates are ordered. First match wins.
 
-SearchIndexLint should parse and analyze:
+SearchIndexPreflight should parse and analyze:
 
 - template name
 - `match`, `unmatch`
@@ -94,7 +94,7 @@ Checks:
 
 ## Index templates
 
-SearchIndexLint should parse template name, index patterns, priority, composed components, template settings, template mappings, aliases, data stream declaration, and `_meta`.
+SearchIndexPreflight should parse template name, index patterns, priority, composed components, template settings, template mappings, aliases, data stream declaration, and `_meta`.
 
 Offline analysis can detect overlapping patterns, same-priority conflicts, suspicious priority changes, missing referenced component templates, component override conflicts, possible built-in pattern collisions, and data stream templates missing expected timestamp mapping.
 
@@ -102,7 +102,7 @@ Offline composition is approximate. The cluster remains authoritative.
 
 ## Component templates
 
-SearchIndexLint should parse mappings, settings, aliases, version, and `_meta`.
+SearchIndexPreflight should parse mappings, settings, aliases, version, and `_meta`.
 
 Checks:
 
@@ -121,7 +121,7 @@ Input format:
 - comments not allowed
 - malformed lines produce parse errors
 
-SearchIndexLint should infer observed types, null counts, max string length, arrays, array element types, object keys, and dotted field representations.
+SearchIndexPreflight should infer observed types, null counts, max string length, arrays, array element types, object keys, and dotted field representations.
 
 Checks:
 
@@ -183,7 +183,7 @@ MVP must not depend on cluster checks.
 
 ## Elasticsearch vs OpenSearch differences
 
-SearchIndexLint must model dialect explicitly:
+SearchIndexPreflight must model dialect explicitly:
 
 ```yaml
 dialect:
@@ -235,7 +235,7 @@ v1:
 
 ## Technical limitations
 
-SearchIndexLint cannot fully determine production cardinality, query workload semantics, heap pressure, actual indexing throughput impact, plugin-provided field types, exact final template resolution without all templates/cluster simulation, or whether object should truly be nested without query requirements.
+SearchIndexPreflight cannot fully determine production cardinality, query workload semantics, heap pressure, actual indexing throughput impact, plugin-provided field types, exact final template resolution without all templates/cluster simulation, or whether object should truly be nested without query requirements.
 
 ## False positives and false negatives
 

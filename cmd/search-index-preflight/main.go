@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/marcinbohm/search-index-lint/internal/cli"
+	"github.com/marcinbohm/search-index-preflight/internal/cli"
 )
 
 func main() {

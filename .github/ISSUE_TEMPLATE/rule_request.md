@@ -1,6 +1,6 @@
 ---
 name: Rule request
-about: Propose a new SearchIndexLint rule
+about: Propose a new SearchIndexPreflight rule
 title: "rule: "
 labels: ["type: rule"]
 assignees: ""

@@ -3,7 +3,7 @@ package rules
 import (
 	"testing"
 
-	"github.com/marcinbohm/search-index-lint/internal/model"
+	"github.com/marcinbohm/search-index-preflight/internal/model"
 )
 
 func TestSIL002StandaloneMappingDynamicTrue(t *testing.T) {

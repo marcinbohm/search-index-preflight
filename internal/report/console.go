@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/marcinbohm/search-index-lint/internal/model"
+	"github.com/marcinbohm/search-index-preflight/internal/model"
 )
 
 func WriteConsole(w io.Writer, result model.RunResult) error {
 	if len(result.Diagnostics) == 0 && len(result.Findings) == 0 {
-		_, err := fmt.Fprintln(w, "SearchIndexLint: no diagnostics or findings")
+		_, err := fmt.Fprintln(w, "SearchIndexPreflight: no diagnostics or findings")
 		return err
 	}
 

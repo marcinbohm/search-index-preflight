@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/marcinbohm/search-index-lint/internal/model"
+	"github.com/marcinbohm/search-index-preflight/internal/model"
 )
 
 func TestWriteConsoleFormatsFindingJSONPointerWithFragmentSeparator(t *testing.T) {

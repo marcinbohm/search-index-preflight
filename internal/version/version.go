@@ -1,6 +1,6 @@
 package version
 
 const (
-	Name    = "SearchIndexLint"
+	Name    = "SearchIndexPreflight"
 	Version = "0.0.0-dev"
 )

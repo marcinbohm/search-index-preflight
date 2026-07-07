@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/marcinbohm/search-index-lint/internal/model"
+	"github.com/marcinbohm/search-index-preflight/internal/model"
 )
 
 func TestSIL001NoFindingUnderThreshold(t *testing.T) {

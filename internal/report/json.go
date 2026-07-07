@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"io"
 
-	"github.com/marcinbohm/search-index-lint/internal/model"
-	"github.com/marcinbohm/search-index-lint/internal/version"
+	"github.com/marcinbohm/search-index-preflight/internal/model"
+	"github.com/marcinbohm/search-index-preflight/internal/version"
 )
 
 const SchemaVersion = "0.1"

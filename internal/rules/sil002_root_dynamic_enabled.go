@@ -3,7 +3,7 @@ package rules
 import (
 	"fmt"
 
-	"github.com/marcinbohm/search-index-lint/internal/model"
+	"github.com/marcinbohm/search-index-preflight/internal/model"
 )
 
 type sil002RootDynamicEnabled struct{}

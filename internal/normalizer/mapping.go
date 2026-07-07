@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/marcinbohm/search-index-lint/internal/model"
+	"github.com/marcinbohm/search-index-preflight/internal/model"
 )
 
 func NormalizeMapping(document model.RawDocument) model.Mapping {

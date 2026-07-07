@@ -23,7 +23,7 @@ func TestWriteJSONDeterministicEmptyResult(t *testing.T) {
 	const want = `{
   "schema_version": "0.1",
   "tool": {
-    "name": "SearchIndexLint",
+    "name": "SearchIndexPreflight",
     "version": "0.0.0-dev"
   },
   "summary": {

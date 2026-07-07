@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/marcinbohm/search-index-lint/internal/model"
+	"github.com/marcinbohm/search-index-preflight/internal/model"
 )
 
 func TestRootHelp(t *testing.T) {
@@ -17,8 +17,8 @@ func TestRootHelp(t *testing.T) {
 	if code != exitSuccess {
 		t.Fatalf("Execute returned %d, want %d; stderr=%s", code, exitSuccess, stderr)
 	}
-	if !strings.Contains(stdout, "SearchIndexLint") {
-		t.Fatalf("stdout %q does not contain SearchIndexLint", stdout)
+	if !strings.Contains(stdout, "SearchIndexPreflight") {
+		t.Fatalf("stdout %q does not contain SearchIndexPreflight", stdout)
 	}
 }
 
@@ -27,7 +27,7 @@ func TestVersion(t *testing.T) {
 	if code != exitSuccess {
 		t.Fatalf("Execute returned %d, want %d; stderr=%s", code, exitSuccess, stderr)
 	}
-	if strings.TrimSpace(stdout) != "SearchIndexLint version 0.0.0-dev" {
+	if strings.TrimSpace(stdout) != "SearchIndexPreflight version 0.0.0-dev" {
 		t.Fatalf("version output = %q", stdout)
 	}
 }

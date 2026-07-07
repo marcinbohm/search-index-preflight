@@ -2,12 +2,12 @@
 
 ## Design principles
 
-SearchIndexLint should be offline-first, deterministic where possible, explicit about heuristics, safe for CI, easy to run locally, useful without production cluster access, fixture-driven, dialect-aware, explainable through stable rule IDs, and conservative about failing builds.
+SearchIndexPreflight should be offline-first, deterministic where possible, explicit about heuristics, safe for CI, easy to run locally, useful without production cluster access, fixture-driven, dialect-aware, explainable through stable rule IDs, and conservative about failing builds.
 
 ## High-level architecture
 
 ```text
-search-index-lint CLI
+search-index-preflight CLI
   |
   +-- input discovery
   |     +-- explicit files
@@ -78,7 +78,7 @@ Current CLI behavior:
 
 ## Strategic Architecture Direction
 
-SearchIndexLint is evolving toward SearchIndexPreflight: a preflight safety CLI for Elasticsearch/OpenSearch schema changes. The current implementation remains static linting; the future direction adds change-aware and read-only operational views.
+SearchIndexPreflight is a preflight safety CLI for Elasticsearch/OpenSearch schema changes. The current implementation remains static linting; the future direction adds change-aware and read-only operational views.
 
 Current static check pipeline:
 
@@ -107,7 +107,7 @@ Oracle or engine-backed validation may be explored later, but it is future work,
 ## Module architecture
 
 ```text
-cmd/search-index-lint/
+cmd/search-index-preflight/
 internal/
   cli/
   config/
@@ -243,9 +243,9 @@ Reports should be produced from structured findings, not from rule-specific text
 
 Default config file names:
 
-- `search-index-lint.yaml`
-- `search-index-lint.yml`
-- `.search-index-lint.yaml`
+- `search-index-preflight.yaml`
+- `search-index-preflight.yml`
+- `.search-index-preflight.yaml`
 
 Config controls dialect/version, input globs, rules, rule config, severity threshold, suppressions, baseline, known external templates, and output defaults.
 

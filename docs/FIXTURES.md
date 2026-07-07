@@ -51,7 +51,7 @@ fixtures/
 fixtures/<category>/<case>/
   README.md
   fixture.yaml
-  search-index-lint.yaml          # optional
+  search-index-preflight.yaml          # optional
   mapping.json              # optional
   index-template.json       # optional
   component-template.json   # optional

@@ -1,12 +1,10 @@
-# SearchIndexLint
+# SearchIndexPreflight
 
 Catch Elasticsearch/OpenSearch index schema and template risks before production.
 
-SearchIndexLint is an offline-first CLI for linting Elasticsearch and OpenSearch mappings, component templates, index templates, dynamic templates, and sample documents.
+SearchIndexPreflight is an offline-first preflight CLI for Elasticsearch and OpenSearch schema changes.
 
 It is designed for teams that treat search schemas as code and want PR-time feedback before risky changes reach production.
-
-SearchIndexLint is being evolved toward SearchIndexPreflight: a preflight CLI for Elasticsearch/OpenSearch schema changes. The current implementation remains `search-index-lint lint`; the planned rename and new command names are future work.
 
 ## Status
 
@@ -14,7 +12,7 @@ Status: pre-alpha / foundation phase.
 
 The current CLI is not production-ready. It can parse and normalize JSON mappings/templates and JSONL/NDJSON sample documents, run the first built-in rules (`SIL001`, `SIL002`, `SIL003`), and report diagnostics/findings. Rule coverage is intentionally very limited.
 
-Current: lint/check-style static checks over supplied schema files.  
+Current: `lint` static checks over supplied schema files.  
 Next strategic direction: diff/preflight analysis for schema changes before merge or deployment.
 
 ## Problem statement
@@ -37,11 +35,11 @@ Common rollout failures include:
 
 These issues often show up after data starts flowing. Remediation may require rollover, reindexing, producer changes, query changes, DLQ drain, or manual operator intervention.
 
-SearchIndexLint moves part of that feedback earlier: into local development, CI, and pull requests.
+SearchIndexPreflight moves part of that feedback earlier: into local development, CI, and pull requests.
 
-## Who SearchIndexLint is for
+## Who SearchIndexPreflight is for
 
-SearchIndexLint is intended for:
+SearchIndexPreflight is intended for:
 
 - search infrastructure engineers
 - platform engineers running Elasticsearch or OpenSearch clusters
@@ -54,7 +52,7 @@ SearchIndexLint is intended for:
 
 Elasticsearch and OpenSearch provide useful APIs such as template simulation, mapping retrieval, and field capability inspection. Those APIs are valuable, but they do not fully solve the pre-merge problem.
 
-SearchIndexLint exists because:
+SearchIndexPreflight exists because:
 
 - CI jobs should not require production cluster credentials.
 - PR reviewers need offline feedback before templates are applied.
@@ -64,7 +62,7 @@ SearchIndexLint exists because:
 - Dashboards and cluster diagnostics are usually post-deploy tools.
 - Teams need explainable rule IDs, suppressions, baselines, fixtures, and machine-readable reports.
 
-SearchIndexLint is not a replacement for vendor APIs. Later versions may use read-only cluster APIs for drift detection and stronger validation. MVP remains offline.
+SearchIndexPreflight is not a replacement for vendor APIs. Later versions may use read-only cluster APIs for drift detection and stronger validation. MVP remains offline.
 
 ## Installation
 
@@ -73,8 +71,8 @@ No release artifacts exist yet.
 Planned future options:
 
 ```bash
-brew install search-index-lint
-go install github.com/marcinbohm/search-index-lint/cmd/search-index-lint@latest
+brew install search-index-preflight
+go install github.com/marcinbohm/search-index-preflight/cmd/search-index-preflight@latest
 ```
 
 ## Local Development
@@ -82,8 +80,8 @@ go install github.com/marcinbohm/search-index-lint/cmd/search-index-lint@latest
 ```bash
 go test ./...
 go vet ./...
-go run ./cmd/search-index-lint --help
-go run ./cmd/search-index-lint lint --mapping examples/basic/mapping.json
+go run ./cmd/search-index-preflight --help
+go run ./cmd/search-index-preflight lint --mapping examples/basic/mapping.json
 ```
 
 ## Current Usage
@@ -91,22 +89,20 @@ go run ./cmd/search-index-lint lint --mapping examples/basic/mapping.json
 Current pre-alpha behavior parses JSON mappings/templates and JSONL/NDJSON sample documents, normalizes supported schema shapes into internal models, runs `SIL001`, `SIL002`, and `SIL003`, then reports parse/normalization diagnostics and rule findings.
 
 ```bash
-search-index-lint lint --mapping mapping.json
-search-index-lint lint --template index-template.json
-search-index-lint lint --component-template component-template.json
-search-index-lint lint --sample-docs samples.jsonl
-search-index-lint lint --sample-docs samples.ndjson
-search-index-lint lint --mapping mapping.json --sample-docs samples.jsonl
-search-index-lint lint ./schemas
-search-index-lint rules list
-search-index-lint explain SIL001
+search-index-preflight lint --mapping mapping.json
+search-index-preflight lint --template index-template.json
+search-index-preflight lint --component-template component-template.json
+search-index-preflight lint --sample-docs samples.jsonl
+search-index-preflight lint --sample-docs samples.ndjson
+search-index-preflight lint --mapping mapping.json --sample-docs samples.jsonl
+search-index-preflight lint ./schemas
+search-index-preflight rules list
+search-index-preflight explain SIL001
 ```
 
 Directory mode currently discovers only `.json`, `.jsonl`, and `.ndjson` files.
 
 ## Planned Direction
-
-The planned future project name is SearchIndexPreflight / `search-index-preflight`. That rename has not happened yet.
 
 Planned future modes:
 
@@ -119,7 +115,7 @@ search-index-preflight doctor --url http://localhost:9200 --pattern "logs-*"  # 
 These commands are not implemented today. The current working command remains:
 
 ```bash
-search-index-lint lint ./schemas
+search-index-preflight lint ./schemas
 ```
 
 ## Example output
@@ -127,7 +123,7 @@ search-index-lint lint ./schemas
 Current `SIL001` finding example:
 
 ```bash
-search-index-lint lint --mapping fixtures/mapping-limits/sil001-total-fields-limit/mapping-over-limit.json
+search-index-preflight lint --mapping fixtures/mapping-limits/sil001-total-fields-limit/mapping-over-limit.json
 ```
 
 ```text
@@ -138,7 +134,7 @@ error SIL001: fixtures/mapping-limits/sil001-total-fields-limit/mapping-over-lim
 Planned future multi-rule output shape:
 
 ```text
-SearchIndexLint 0.1.0
+SearchIndexPreflight 0.1.0
 
 Dialect: elasticsearch 8.x
 Scanned: 6 files
@@ -247,7 +243,7 @@ Initial MVP rules:
 
 ## Non-goals
 
-SearchIndexLint v1 is not:
+SearchIndexPreflight v1 is not:
 
 - a dashboard
 - a SaaS product
@@ -332,7 +328,7 @@ No production release exists yet.
 
 ## Feedback wanted
 
-SearchIndexLint is looking for feedback on:
+SearchIndexPreflight is looking for feedback on:
 
 - real Elasticsearch/OpenSearch schema failure cases
 - rule false positives
@@ -346,7 +342,7 @@ Please do not share confidential mappings, production logs, customer data, inter
 
 ## Safety warning
 
-SearchIndexLint detects risk. It does not prove a schema is safe.
+SearchIndexPreflight detects risk. It does not prove a schema is safe.
 
 It does not replace staging validation, integration tests, load tests, rollout planning, cluster observability, experienced operator review, vendor documentation, or incident response judgment.
 

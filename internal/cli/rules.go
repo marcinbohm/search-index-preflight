@@ -36,7 +36,7 @@ func runRulesList(args []string, stdout, stderr io.Writer) int {
 
 func writeRulesHelp(w io.Writer) {
 	fmt.Fprint(w, `Usage:
-  search-index-lint rules <command>
+  search-index-preflight rules <command>
 
 Available Commands:
   list        List available rules
@@ -45,7 +45,7 @@ Available Commands:
 
 func writeRulesListHelp(w io.Writer) {
 	fmt.Fprint(w, `Usage:
-  search-index-lint rules list
+  search-index-preflight rules list
 
 List available rules.
 Implementation is in progress.

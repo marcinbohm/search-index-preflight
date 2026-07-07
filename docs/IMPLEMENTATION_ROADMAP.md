@@ -17,7 +17,7 @@
 
 ## Strategic Roadmap Update: Preflight Direction
 
-SearchIndexLint is evolving toward SearchIndexPreflight: a preflight safety CLI for Elasticsearch/OpenSearch schema changes.
+SearchIndexPreflight is a preflight safety CLI for Elasticsearch/OpenSearch schema changes.
 
 Completed foundations:
 
@@ -30,12 +30,11 @@ Completed foundations:
 Next milestones:
 
 1. finish any current dynamic-template hardening already in progress
-2. strategic rename to SearchIndexPreflight / `search-index-preflight`
-3. diff foundation
-4. first diff rules
-5. Markdown/PR report
-6. doctor/field_caps proof of concept
-7. GitHub Action/SARIF later
+2. diff foundation
+3. first diff rules
+4. Markdown/PR report
+5. doctor/field_caps proof of concept
+6. GitHub Action/SARIF later
 
 Stop expanding state-only heuristic rules for now. Do not implement SIL004 next unless explicitly approved. The next major implementation track should be diff/preflight foundation.
 
@@ -57,7 +56,7 @@ Current CLI behavior:
 
 Next:
 
-- dedicated rename step to SearchIndexPreflight, followed by diff/preflight foundation
+- diff/preflight foundation
 
 ## Pre-alpha
 
@@ -79,7 +78,7 @@ Scope:
 Done criteria:
 
 - `go test ./...` passes
-- `search-index-lint lint fixtures/... --format json` works
+- `search-index-preflight lint fixtures/... --format json` works
 - every implemented rule has fixtures
 - invalid JSON/YAML returns clean error
 - no network access
@@ -120,7 +119,7 @@ Done criteria:
 
 ## Alpha
 
-Goal: make SearchIndexLint useful in pull requests.
+Goal: make SearchIndexPreflight useful in pull requests.
 
 Scope:
 

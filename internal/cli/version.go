@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/marcinbohm/search-index-lint/internal/version"
+	"github.com/marcinbohm/search-index-preflight/internal/version"
 )
 
 func runVersion(args []string, stdout, stderr io.Writer) int {
@@ -22,7 +22,7 @@ func runVersion(args []string, stdout, stderr io.Writer) int {
 
 func writeVersionHelp(w io.Writer) {
 	fmt.Fprint(w, `Usage:
-  search-index-lint version
+  search-index-preflight version
 
 Print version information.
 `)

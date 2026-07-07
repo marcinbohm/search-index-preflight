@@ -39,5 +39,5 @@ suppressions:
     expires: "2026-12-31"
 
 baseline:
-  file: "search-index-lint.baseline.json"
+  file: "search-index-preflight.baseline.json"
   mode: "hide_existing"

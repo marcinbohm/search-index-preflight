@@ -29,7 +29,7 @@ go.work.sum
 
 # Local maintainer/Codex working context and transport archive
 .local/
-search-index-lint_repo_docs/
+search-index-preflight_repo_docs/
 
 # Editor/IDE
 .idea/

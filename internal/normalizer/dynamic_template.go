@@ -3,7 +3,7 @@ package normalizer
 import (
 	"strconv"
 
-	"github.com/marcinbohm/search-index-lint/internal/model"
+	"github.com/marcinbohm/search-index-preflight/internal/model"
 )
 
 func normalizeDynamicTemplates(source model.Source, value any, pointer string) ([]model.DynamicTemplate, []model.Diagnostic) {

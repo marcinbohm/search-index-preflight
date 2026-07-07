@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest a feature for SearchIndexLint
+about: Suggest a feature for SearchIndexPreflight
 title: "feature: "
 labels: ["type: feature"]
 assignees: ""
@@ -16,12 +16,12 @@ What problem does this solve?
 
 ## Proposed behavior
 
-What should SearchIndexLint do?
+What should SearchIndexPreflight do?
 
 ## Example command or config
 
 ```bash
-search-index-lint ...
+search-index-preflight ...
 ```
 
 ```yaml

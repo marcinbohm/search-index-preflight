@@ -35,28 +35,25 @@ Planned but not implemented:
 
 | Command | Status | Notes |
 |---|---|---|
-| `search-index-lint lint` | Current | Static checks over supplied mappings/templates/sample docs. |
-| `search-index-lint version` | Current | Prints version information. |
-| `search-index-lint rules list` | Current stub | Command exists; full rule listing UX is not complete. |
-| `search-index-lint explain` | Current stub | Command exists; full rule explanation UX is not complete. |
-| `search-index-preflight check` | Planned after rename | Future preferred name for static checks. |
-| `search-index-preflight lint` | Planned compatibility alias | Keeps existing mental model after rename. |
+| `search-index-preflight lint` | Current; future compatibility alias | Static checks over supplied mappings/templates/sample docs. |
+| `search-index-preflight version` | Current | Prints version information. |
+| `search-index-preflight rules list` | Current stub | Command exists; full rule listing UX is not complete. |
+| `search-index-preflight explain` | Current stub | Command exists; full rule explanation UX is not complete. |
+| `search-index-preflight check` | Planned | Future preferred name for static checks. |
 | `search-index-preflight diff` | Planned | Future preflight analysis comparing old/new schema corpora. |
 | `search-index-preflight doctor` | Planned later | Future read-only cluster inspection mode. |
 
-The repository, Go module, and binary are still named `search-index-lint`. The SearchIndexPreflight rename is planned as a separate change.
+The project, Go module, and binary are now named `search-index-preflight`. `check`, `diff`, and `doctor` remain planned.
 
 No command may perform cluster write operations.
 
 ## Command overview
 
 ```text
-search-index-lint
+search-index-preflight
   lint
   rules list
   explain
-  baseline create
-  diff
   version
 ```
 
@@ -64,7 +61,6 @@ Future:
 
 ```text
 search-index-preflight check ./schemas
-search-index-preflight lint ./schemas
 search-index-preflight diff old/ new/
 search-index-preflight doctor --url http://localhost:9200 --pattern "logs-*"
 ```
@@ -85,19 +81,19 @@ search-index-preflight doctor --url http://localhost:9200 --pattern "logs-*"
 --help                   Show help
 ```
 
-## `search-index-lint lint`
+## `search-index-preflight lint`
 
 Examples:
 
 ```bash
-search-index-lint lint --mapping mapping.json
-search-index-lint lint --template index-template.json
-search-index-lint lint --component-template component-template.json
-search-index-lint lint --sample-docs samples.jsonl
-search-index-lint lint --mapping mapping.json --sample-docs samples.jsonl
-search-index-lint lint ./schemas
-search-index-lint lint ./schemas --format markdown              # planned
-search-index-lint lint ./schemas --format sarif --output search-index-lint.sarif  # planned
+search-index-preflight lint --mapping mapping.json
+search-index-preflight lint --template index-template.json
+search-index-preflight lint --component-template component-template.json
+search-index-preflight lint --sample-docs samples.jsonl
+search-index-preflight lint --mapping mapping.json --sample-docs samples.jsonl
+search-index-preflight lint ./schemas
+search-index-preflight lint ./schemas --format markdown              # planned
+search-index-preflight lint ./schemas --format sarif --output search-index-preflight.sarif  # planned
 ```
 
 Flags:
@@ -232,7 +228,7 @@ JSONL, one JSON object per line:
 ## Directory input
 
 ```bash
-search-index-lint lint ./schemas
+search-index-preflight lint ./schemas
 ```
 
 Directory scan behavior:
@@ -257,7 +253,7 @@ JSON skeleton:
 {
   "schema_version": "0.1",
   "tool": {
-    "name": "SearchIndexLint",
+    "name": "SearchIndexPreflight",
     "version": "0.1.0"
   },
   "dialect": {
@@ -282,11 +278,11 @@ JSON skeleton:
 
 Default names:
 
-- `search-index-lint.yaml`
-- `search-index-lint.yml`
-- `.search-index-lint.yaml`
+- `search-index-preflight.yaml`
+- `search-index-preflight.yml`
+- `.search-index-preflight.yaml`
 
-Example config is provided in `search-index-lint.example.yaml`.
+Example config is provided in `search-index-preflight.example.yaml`.
 
 ## Exit codes
 
@@ -346,8 +342,8 @@ Beta scope.
 Commands:
 
 ```bash
-search-index-lint baseline create ./schemas --output search-index-lint.baseline.json
-search-index-lint lint ./schemas --baseline search-index-lint.baseline.json
+search-index-preflight baseline create ./schemas --output search-index-preflight.baseline.json
+search-index-preflight lint ./schemas --baseline search-index-preflight.baseline.json
 ```
 
 Modes:
@@ -356,13 +352,12 @@ Modes:
 - `report_existing`
 - `fail_on_new`
 
-## Future cluster commands
+## Future doctor command
 
 Not MVP.
 
 ```bash
-search-index-lint cluster inspect --url "$ES_URL" --index "logs-*"
-search-index-lint cluster simulate --url "$ES_URL" --index-name "logs-app-2026.07.06"
+search-index-preflight doctor --url "$ES_URL" --pattern "logs-*"
 ```
 
-Cluster commands must never write to a cluster.
+Doctor mode must be read-only and must never write to a cluster.

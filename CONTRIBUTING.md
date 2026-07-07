@@ -1,6 +1,6 @@
-# Contributing to SearchIndexLint
+# Contributing to SearchIndexPreflight
 
-SearchIndexLint is an offline-first Elasticsearch/OpenSearch index schema risk linter. Contributions are welcome, but the project is strict about scope, fixtures, tests, and public-data safety.
+SearchIndexPreflight is an offline-first Elasticsearch/OpenSearch index schema risk linter. Contributions are welcome, but the project is strict about scope, fixtures, tests, and public-data safety.
 
 ## Project scope
 
@@ -39,8 +39,8 @@ Requirements:
 Clone:
 
 ```bash
-git clone https://github.com/marcinbohm/search-index-lint.git
-cd search-index-lint
+git clone https://github.com/marcinbohm/search-index-preflight.git
+cd search-index-preflight
 ```
 
 Run tests:
@@ -52,8 +52,8 @@ go test ./...
 Run locally:
 
 ```bash
-go run ./cmd/search-index-lint --help
-go run ./cmd/search-index-lint lint --mapping examples/basic/mapping.json
+go run ./cmd/search-index-preflight --help
+go run ./cmd/search-index-preflight lint --mapping examples/basic/mapping.json
 ```
 
 Format:
@@ -83,7 +83,7 @@ Real SIL rules are not implemented yet. Coordinate first-rule work with maintain
 9. Add expected JSON output.
 10. Add suppression fixture if applicable.
 11. Update `docs/RULE_CATALOG.md`.
-12. Update `search-index-lint rules list` metadata if generated manually.
+12. Update `search-index-preflight rules list` metadata if generated manually.
 13. Update README or CLI docs if behavior changes.
 
 Rule implementation must not read files directly, format reports, call network APIs, depend on CLI flags directly, use production data, or panic on malformed input.

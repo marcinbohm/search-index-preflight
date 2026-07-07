@@ -10,13 +10,13 @@ Accepted.
 
 ## Context
 
-SearchIndexLint is an offline-first CLI and future GitHub Action for linting Elasticsearch/OpenSearch mappings, templates, dynamic templates, and sample documents.
+SearchIndexPreflight is an offline-first CLI and future GitHub Action for linting Elasticsearch/OpenSearch mappings, templates, dynamic templates, and sample documents.
 
 The tool needs to be easy to run in CI, easy to distribute as a single binary, fast enough for schema repositories, maintainable by OSS contributors, suitable for infrastructure tooling, capable of producing JSON/Markdown/SARIF, cross-platform, practical for GitHub Actions, and safe by default.
 
 ## Decision
 
-SearchIndexLint will be implemented in Go.
+SearchIndexPreflight will be implemented in Go.
 
 Initial stack:
 
@@ -44,7 +44,7 @@ Recommended license: Apache-2.0, pending maintainer confirmation.
 
 ## Rationale
 
-Go is selected because SearchIndexLint should behave like a serious infrastructure CLI: single binary, quick startup, deterministic behavior, simple CI integration, low installation burden, straightforward release process, readable codebase, and practical contributor experience.
+Go is selected because SearchIndexPreflight should behave like a serious infrastructure CLI: single binary, quick startup, deterministic behavior, simple CI integration, low installation burden, straightforward release process, readable codebase, and practical contributor experience.
 
 The hard parts are domain modeling, rule quality, fixture coverage, false-positive control, report UX, compatibility handling, and documentation. Go is sufficient for those and avoids unnecessary complexity.
 

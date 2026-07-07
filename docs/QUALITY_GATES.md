@@ -2,13 +2,13 @@
 
 ## Quality philosophy
 
-SearchIndexLint must be boring, deterministic, and trustworthy.
+SearchIndexPreflight must be boring, deterministic, and trustworthy.
 
 A noisy linter will be disabled. A misleading linter will damage trust. A hard-to-run linter will not be adopted.
 
 ## Test strategy
 
-SearchIndexLint uses:
+SearchIndexPreflight uses:
 
 - unit tests
 - parser tests
@@ -44,11 +44,11 @@ Before v1, every default-on rule should also have suppression fixture, compatibi
 
 Cover:
 
-- `search-index-lint lint --mapping`
-- `search-index-lint lint --template`
-- `search-index-lint lint --component-template`
-- `search-index-lint lint --sample-docs`
-- `search-index-lint lint ./schemas`
+- `search-index-preflight lint --mapping`
+- `search-index-preflight lint --template`
+- `search-index-preflight lint --component-template`
+- `search-index-preflight lint --sample-docs`
+- `search-index-preflight lint ./schemas`
 - format selection
 - output file writing
 - fail thresholds

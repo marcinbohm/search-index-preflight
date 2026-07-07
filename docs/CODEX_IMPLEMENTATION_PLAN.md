@@ -4,7 +4,7 @@
 
 Codex CLI is the implementation agent.
 
-Codex should implement SearchIndexLint in small, reviewable changes that follow the documented architecture and CLI contract.
+Codex should implement SearchIndexPreflight in small, reviewable changes that follow the documented architecture and CLI contract.
 
 Codex must not invent product scope. If a task is not in the roadmap, Codex should stop and ask for maintainer review.
 
@@ -40,7 +40,7 @@ Next expected sprint should not implement SIL004 by default. Do not reimplement 
 
 ## Current Strategic Direction
 
-SearchIndexLint is evolving toward SearchIndexPreflight: a preflight safety CLI for Elasticsearch/OpenSearch schema changes.
+SearchIndexPreflight is a preflight safety CLI for Elasticsearch/OpenSearch schema changes.
 
 Do not implement SIL004 next unless explicitly approved. Do not add more heuristic static rules until the diff/preflight foundation starts.
 
@@ -83,7 +83,7 @@ Files:
 
 ```text
 go.mod
-cmd/search-index-lint/main.go
+cmd/search-index-preflight/main.go
 internal/cli/root.go
 internal/cli/lint.go
 internal/cli/rules.go
@@ -137,7 +137,7 @@ Define fixture metadata, discovery, golden JSON comparison, path normalization, 
 
 ### Phase 8: config and suppressions
 
-Load `search-index-lint.yaml`, parse dialect, inputs, rules, severity threshold, suppressions, require reasons, warn on expiry, and apply suppressions.
+Load `search-index-preflight.yaml`, parse dialect, inputs, rules, severity threshold, suppressions, require reasons, warn on expiry, and apply suppressions.
 
 ### Phase 9: CLI UX polish
 

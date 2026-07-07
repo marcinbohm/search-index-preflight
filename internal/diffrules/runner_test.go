@@ -2,6 +2,7 @@ package diffrules
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/marcinbohm/search-index-preflight/internal/diff"
@@ -27,6 +28,92 @@ func TestRegistryRejectsDuplicateIDs(t *testing.T) {
 	_, err := NewRegistry(fakeRule{id: "DIF001"}, fakeRule{id: "DIF001"})
 	if err == nil {
 		t.Fatal("expected duplicate ID error")
+	}
+}
+
+func TestRegistryRejectsNilRule(t *testing.T) {
+	_, err := NewRegistry(nil)
+	if err == nil {
+		t.Fatal("expected nil rule error")
+	}
+	if !strings.Contains(err.Error(), "diff rule is nil") {
+		t.Fatalf("expected nil diff rule message, got %q", err.Error())
+	}
+}
+
+func TestRegistryRejectsIncompleteMetadata(t *testing.T) {
+	valid := validFakeMetadata()
+	tests := []struct {
+		name     string
+		metadata Metadata
+	}{
+		{
+			name: "empty ID",
+			metadata: func() Metadata {
+				metadata := valid
+				metadata.ID = ""
+				return metadata
+			}(),
+		},
+		{
+			name: "empty name",
+			metadata: func() Metadata {
+				metadata := valid
+				metadata.Name = ""
+				return metadata
+			}(),
+		},
+		{
+			name: "empty category",
+			metadata: func() Metadata {
+				metadata := valid
+				metadata.Category = ""
+				return metadata
+			}(),
+		},
+		{
+			name: "empty severity",
+			metadata: func() Metadata {
+				metadata := valid
+				metadata.Severity = ""
+				return metadata
+			}(),
+		},
+		{
+			name: "empty confidence",
+			metadata: func() Metadata {
+				metadata := valid
+				metadata.Confidence = ""
+				return metadata
+			}(),
+		},
+		{
+			name: "empty determinism",
+			metadata: func() Metadata {
+				metadata := valid
+				metadata.Determinism = ""
+				return metadata
+			}(),
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := NewRegistry(fakeRule{metadata: tt.metadata})
+			if err == nil {
+				t.Fatal("expected metadata validation error")
+			}
+		})
+	}
+}
+
+func TestRunRejectsNilRegistry(t *testing.T) {
+	_, err := Run(Context{}, nil, RunRequest{})
+	if err == nil {
+		t.Fatal("expected nil registry error")
+	}
+	if !strings.Contains(err.Error(), "diff rule registry is nil") {
+		t.Fatalf("expected nil registry message, got %q", err.Error())
 	}
 }
 
@@ -80,12 +167,29 @@ func TestDiffCompareToDIF001Integration(t *testing.T) {
 }
 
 type fakeRule struct {
-	id string
+	id       string
+	metadata Metadata
 }
 
 func (r fakeRule) Metadata() Metadata {
+	if r.metadata.ID != "" ||
+		r.metadata.Name != "" ||
+		r.metadata.Category != "" ||
+		r.metadata.Severity != "" ||
+		r.metadata.Confidence != "" ||
+		r.metadata.Determinism != "" {
+		return r.metadata
+	}
+	metadata := validFakeMetadata()
+	if r.id != "" {
+		metadata.ID = r.id
+	}
+	return metadata
+}
+
+func validFakeMetadata() Metadata {
 	return Metadata{
-		ID:          r.id,
+		ID:          "FAKE001",
 		Name:        "fake",
 		Category:    "test",
 		Description: "fake test rule",

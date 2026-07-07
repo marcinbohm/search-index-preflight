@@ -710,6 +710,29 @@ func TestDiffDirectorySameRelativePathEmitsDIF001(t *testing.T) {
 	}
 }
 
+func TestDiffDirectorySameRelativePathEmitsDIF003ForAddedField(t *testing.T) {
+	root := t.TempDir()
+	baseDir := filepath.Join(root, "old")
+	currentDir := filepath.Join(root, "new")
+	writeFileAt(t, baseDir, filepath.Join("schemas", "mapping.json"), `{"properties":{"status":{"type":"keyword"}}}`)
+	writeFileAt(t, currentDir, filepath.Join("schemas", "mapping.json"), `{"properties":{"status":{"type":"keyword"},"customer_id":{"type":"keyword"}}}`)
+
+	code, stdout, stderr := executeForTest("diff", "--base", baseDir, "--current", currentDir)
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stdout=%s stderr=%s", code, exitSuccess, stdout, stderr)
+	}
+	for _, text := range []string{"DIF003", filepath.Join("schemas", "mapping.json"), "customer_id"} {
+		if !strings.Contains(stdout, text) {
+			t.Fatalf("stdout %q does not contain %q", stdout, text)
+		}
+	}
+	for _, unexpected := range []string{"DIF001", "DIF002"} {
+		if strings.Contains(stdout, unexpected) {
+			t.Fatalf("stdout contains unexpected %s for clean field addition: %s", unexpected, stdout)
+		}
+	}
+}
+
 func TestDiffDIF001FixtureEmitsFinding(t *testing.T) {
 	base := fixturePath("diff", "dif001-field-type-changed", "base")
 	current := fixturePath("diff", "dif001-field-type-changed", "current")
@@ -1142,6 +1165,64 @@ func TestDiffFormatJSONWithDIF003Finding(t *testing.T) {
 	}
 }
 
+func TestDiffFormatJSONWithAllDiffRules(t *testing.T) {
+	base, current := writeDiffMappingFiles(t, `{"properties":{"status":{"type":"keyword"},"legacy_id":{"type":"keyword"}}}`, `{"properties":{"status":{"type":"long"},"customer_id":{"type":"keyword"}}}`)
+
+	code, stdout, stderr := executeForTest("diff", "--base", base, "--current", current, "--format", "json")
+	if code != exitFindings {
+		t.Fatalf("Execute returned %d, want %d; stdout=%s stderr=%s", code, exitFindings, stdout, stderr)
+	}
+
+	var result model.RunResult
+	if err := json.Unmarshal([]byte(stdout), &result); err != nil {
+		t.Fatalf("stdout is not valid JSON: %v\n%s", err, stdout)
+	}
+	if result.Summary.FindingsTotal != 3 {
+		t.Fatalf("findings_total = %d, want 3", result.Summary.FindingsTotal)
+	}
+	if result.Summary.Error != 1 {
+		t.Fatalf("summary.error = %d, want 1", result.Summary.Error)
+	}
+	if result.Summary.Warning != 1 {
+		t.Fatalf("summary.warning = %d, want 1", result.Summary.Warning)
+	}
+	if result.Summary.Info != 1 {
+		t.Fatalf("summary.info = %d, want 1", result.Summary.Info)
+	}
+	if result.Summary.ExitCode != exitFindings {
+		t.Fatalf("summary.exit_code = %d, want %d", result.Summary.ExitCode, exitFindings)
+	}
+	if len(result.Diagnostics) != 0 {
+		t.Fatalf("diagnostics length = %d, want 0", len(result.Diagnostics))
+	}
+	if result.Diagnostics == nil {
+		t.Fatal("diagnostics is nil, want empty slice")
+	}
+	if len(result.Findings) != 3 {
+		t.Fatalf("findings length = %d, want 3", len(result.Findings))
+	}
+	wantIDs := []string{"DIF001", "DIF002", "DIF003"}
+	for i, want := range wantIDs {
+		if result.Findings[i].ID != want {
+			t.Fatalf("finding IDs = %#v, want order %#v", []string{result.Findings[0].ID, result.Findings[1].ID, result.Findings[2].ID}, wantIDs)
+		}
+	}
+}
+
+func TestDiffConsoleWithAllDiffRules(t *testing.T) {
+	base, current := writeDiffMappingFiles(t, `{"properties":{"status":{"type":"keyword"},"legacy_id":{"type":"keyword"}}}`, `{"properties":{"status":{"type":"long"},"customer_id":{"type":"keyword"}}}`)
+
+	code, stdout, stderr := executeForTest("diff", "--base", base, "--current", current)
+	if code != exitFindings {
+		t.Fatalf("Execute returned %d, want %d; stdout=%s stderr=%s", code, exitFindings, stdout, stderr)
+	}
+	for _, text := range []string{"DIF001", "DIF002", "DIF003", "error", "warning", "info", "status", "legacy_id", "customer_id"} {
+		if !strings.Contains(stdout, text) {
+			t.Fatalf("stdout %q does not contain %q", stdout, text)
+		}
+	}
+}
+
 func TestLintDoesNotEmitDiffRules(t *testing.T) {
 	path := writeTempFile(t, "mapping.json", `{"properties":{"status":{"type":"keyword"}}}`)
 
@@ -1226,6 +1307,53 @@ func TestDiffOutputWritesWarningOnlyDIF002JSONReport(t *testing.T) {
 	}
 	if result.Summary.Warning != 1 {
 		t.Fatalf("summary.warning = %d, want 1", result.Summary.Warning)
+	}
+	if result.Summary.Error != 0 {
+		t.Fatalf("summary.error = %d, want 0", result.Summary.Error)
+	}
+	if result.Summary.ExitCode != exitSuccess {
+		t.Fatalf("summary.exit_code = %d, want %d", result.Summary.ExitCode, exitSuccess)
+	}
+}
+
+func TestDiffOutputWritesInfoOnlyDIF003JSONReport(t *testing.T) {
+	base := fixturePath("diff", "dif003-field-added", "base")
+	current := fixturePath("diff", "dif003-field-added", "current")
+	output := filepath.Join(t.TempDir(), "report.json")
+
+	code, stdout, stderr := executeForTest("diff", "--base", base, "--current", current, "--format", "json", "--output", output)
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stdout=%s stderr=%s", code, exitSuccess, stdout, stderr)
+	}
+	if stdout != "" {
+		t.Fatalf("stdout = %q, want empty when --output is used", stdout)
+	}
+
+	content, err := os.ReadFile(output)
+	if err != nil {
+		t.Fatalf("ReadFile returned error: %v", err)
+	}
+	var result model.RunResult
+	if err := json.Unmarshal(content, &result); err != nil {
+		t.Fatalf("report is not valid JSON: %v\n%s", err, string(content))
+	}
+	if len(result.Findings) != 1 {
+		t.Fatalf("findings length = %d, want 1", len(result.Findings))
+	}
+	if result.Findings[0].ID != "DIF003" {
+		t.Fatalf("finding ID = %q, want DIF003", result.Findings[0].ID)
+	}
+	if result.Findings[0].Severity != model.SeverityInfo {
+		t.Fatalf("finding severity = %q, want %q", result.Findings[0].Severity, model.SeverityInfo)
+	}
+	if result.Summary.FindingsTotal != 1 {
+		t.Fatalf("findings_total = %d, want 1", result.Summary.FindingsTotal)
+	}
+	if result.Summary.Info != 1 {
+		t.Fatalf("summary.info = %d, want 1", result.Summary.Info)
+	}
+	if result.Summary.Warning != 0 {
+		t.Fatalf("summary.warning = %d, want 0", result.Summary.Warning)
 	}
 	if result.Summary.Error != 0 {
 		t.Fatalf("summary.error = %d, want 0", result.Summary.Error)

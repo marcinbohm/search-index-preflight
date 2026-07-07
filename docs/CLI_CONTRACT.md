@@ -166,6 +166,10 @@ Flags:
 Current limitations:
 
 - emits only `DIF001 field-type-changed`
+- explicit file-vs-file inputs are compared as one logical resource, even when filenames differ
+- directory-vs-directory inputs are matched by relative path
+- file-vs-directory inputs are path-based and limited
+- no rename detection
 - no git refs or `--base origin/main`
 - no Markdown or SARIF output
 - no settings, aliases, dynamic template, template priority, composed template, sample document, or cluster-backed comparison

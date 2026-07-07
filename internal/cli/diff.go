@@ -61,6 +61,8 @@ func runDiff(args []string, stdout, stderr io.Writer) int {
 		return exitUsage
 	}
 
+	baseIsFile := isRegularFile(basePath)
+	currentIsFile := isRegularFile(currentPath)
 	baseSources, baseDiagnostics := collectDiffSources(basePath)
 	currentSources, currentDiagnostics := collectDiffSources(currentPath)
 
@@ -77,7 +79,9 @@ func runDiff(args []string, stdout, stderr io.Writer) int {
 	if len(diagnostics) > 0 {
 		exitCode = exitInput
 	} else {
-		alignSingleFileCorpusResourceIdentity(baseInputs.Sources, currentInputs.Sources, &baseInputs.Corpus)
+		if baseIsFile && currentIsFile {
+			alignSingleFileCorpusResourceIdentity(baseInputs.Sources, currentInputs.Sources, &baseInputs.Corpus)
+		}
 		diffResult, err := diff.Compare(baseInputs.Corpus, currentInputs.Corpus)
 		if err != nil {
 			fmt.Fprintf(stderr, "compare schema inputs: %v\n", err)
@@ -159,6 +163,14 @@ func collectDiffSources(path string) ([]input.Source, []model.Diagnostic) {
 	}
 	rebaseSources(path, sources)
 	return sources, nil
+}
+
+func isRegularFile(path string) bool {
+	info, err := os.Stat(path)
+	if err != nil {
+		return false
+	}
+	return info.Mode().IsRegular()
 }
 
 func rebaseSources(root string, sources []input.Source) {

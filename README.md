@@ -105,6 +105,8 @@ Directory mode currently discovers only `.json`, `.jsonl`, and `.ndjson` files.
 
 The experimental `diff` command currently emits only `DIF001` field type changes. It does not support git refs, PR comments, settings/alias diffs, dynamic template diffs, composed template analysis, sample document comparison, or cluster-backed validation.
 
+Diff matching is intentionally simple: explicit file-vs-file inputs are compared as one logical resource even when filenames differ, while directory-vs-directory inputs are matched by relative path. File-vs-directory behavior is path-based and limited. There is no rename detection yet.
+
 ## Planned Direction
 
 Planned future modes:

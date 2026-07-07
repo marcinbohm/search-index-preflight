@@ -4,21 +4,7 @@ These items are manual repository-presentation tasks for maintainers.
 
 ## Suggested GitHub topics
 
-```text
-elasticsearch
-opensearch
-search
-schema
-mapping
-index-template
-ci
-preflight
-linter
-golang
-devops
-sre
-schema-as-code
-```
+See [Alpha readiness](../ALPHA_READINESS.md#visibility-checklist) for the current recommended GitHub topics.
 
 ## Before first pre-alpha release
 

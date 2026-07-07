@@ -32,7 +32,7 @@ go run ./cmd/search-index-preflight diff \
   --current fixtures/diff/mixed-field-changes/current
 ```
 
-Expected result: one `DIF001` error, one `DIF002` warning, and one `DIF003` info finding.
+Expected result: one `DIF001` error, one `DIF002` warning, and one `DIF003` info finding. This command exits with status 1 because `DIF001` is an error finding.
 
 ## 5. Inspect available rules
 

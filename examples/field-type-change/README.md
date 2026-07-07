@@ -12,9 +12,13 @@ go run ./cmd/search-index-preflight diff \
 
 ## Expected finding
 
+The excerpt below shows the finding line. See `expected-output.txt` for the full expected stdout.
+
 ```text
 error DIF001: mapping.json#/properties/status: Field "status" changed type from "keyword" to "long".
 ```
+
+This command exits with status 1 because `DIF001` is an error finding.
 
 ## Why this matters
 

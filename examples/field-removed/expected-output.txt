@@ -1,0 +1,2 @@
+warning DIF002: mapping.json#/properties/legacy_id: Field "legacy_id" was removed from the current schema.
+  Remediation: Verify that producers, queries, dashboards, alerts, and downstream consumers no longer depend on this field. If the removal is intentional, coordinate it with index rollover or reindexing plans.

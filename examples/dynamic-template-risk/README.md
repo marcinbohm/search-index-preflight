@@ -11,9 +11,13 @@ go run ./cmd/search-index-preflight lint \
 
 ## Expected finding
 
+The excerpt below shows the finding line. See `expected-output.txt` for the full expected stdout.
+
 ```text
 warning SIL003: examples/dynamic-template-risk/mapping.json#/dynamic_templates/0/strings_as_keywords: Dynamic template "strings_as_keywords" does not declare match_mapping_type.
 ```
+
+This warning-only example exits with status 0 under the default `--fail-on error` threshold.
 
 ## Why this matters
 

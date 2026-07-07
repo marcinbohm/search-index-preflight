@@ -133,6 +133,7 @@ search-index-preflight version
 ## Examples
 
 - [Field type change](examples/field-type-change/README.md): emits `DIF001`.
+- [Field removed](examples/field-removed/README.md): emits `DIF002`.
 - [Dynamic template risk](examples/dynamic-template-risk/README.md): emits `SIL003`.
 - [Diff fixtures](fixtures/diff/README.md): small public fixtures for `DIF001`, `DIF002`, `DIF003`, no-change, and mixed-change behavior.
 

@@ -9,13 +9,15 @@ SearchIndexPreflight has no stable release yet.
 | pre-alpha | No security support guarantee |
 | alpha | Best-effort |
 | beta | Best-effort |
-| v1.x | TBD |
+| v1.x | Planned stable support |
 
 ## Reporting a vulnerability
 
-Please report suspected vulnerabilities by opening a GitHub security advisory if available for this repository. If that is not available, open a minimal public issue saying that you need a private security contact, without including sensitive details.
+Please report suspected vulnerabilities by opening a GitHub security advisory if available for this repository.
 
-Do not include production mappings, cluster URLs, credentials, tokens, customer data, internal service names, private logs, full production templates, or sensitive sample documents.
+If a GitHub security advisory is not available, open a minimal public issue asking for a private security contact. Do not include vulnerability details, exploit steps, production mappings, cluster URLs, credentials, tokens, or other sensitive information in that public issue.
+
+Do not include customer data, internal service names, private logs, full production templates, sensitive sample documents, or other confidential material in public issues.
 
 ## Tool security model
 

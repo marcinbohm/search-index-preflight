@@ -1,0 +1,7 @@
+{
+  "properties": {
+    "legacy_id": {
+      "type": "keyword"
+    }
+  }
+}

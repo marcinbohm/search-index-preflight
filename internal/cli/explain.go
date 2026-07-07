@@ -62,6 +62,10 @@ type ruleExplainItem struct {
 }
 
 func parseExplainArgs(args []string) (ruleID string, format string, help bool, message string) {
+	// parseExplainArgs is intentionally hand-rolled instead of using flag.FlagSet.
+	// Go's flag package stops parsing flags after the first positional argument,
+	// but explain supports both `explain DIF003 --format json` and
+	// `explain --format json DIF003`.
 	format = "console"
 	var positionals []string
 	for i := 0; i < len(args); i++ {

@@ -124,6 +124,9 @@ func TestRulesListFormatJSON(t *testing.T) {
 	if code != exitSuccess {
 		t.Fatalf("Execute returned %d, want %d; stderr=%s", code, exitSuccess, stderr)
 	}
+	if strings.Contains(stdout, `"notes"`) {
+		t.Fatalf("rules list JSON contains notes field, want compact metadata only: %s", stdout)
+	}
 
 	var output ruleListOutput
 	if err := json.Unmarshal([]byte(stdout), &output); err != nil {
@@ -286,7 +289,27 @@ func TestExplainDIF003FormatJSON(t *testing.T) {
 	if code != exitSuccess {
 		t.Fatalf("Execute returned %d, want %d; stderr=%s", code, exitSuccess, stderr)
 	}
+	assertExplainDIF003JSON(t, stdout)
+}
 
+func TestExplainFormatJSONBeforeRuleID(t *testing.T) {
+	code, stdout, stderr := executeForTest("explain", "--format", "json", "DIF003")
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stderr=%s", code, exitSuccess, stderr)
+	}
+	assertExplainDIF003JSON(t, stdout)
+}
+
+func TestExplainFormatJSONEqualsBeforeRuleID(t *testing.T) {
+	code, stdout, stderr := executeForTest("explain", "--format=json", "DIF003")
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stderr=%s", code, exitSuccess, stderr)
+	}
+	assertExplainDIF003JSON(t, stdout)
+}
+
+func assertExplainDIF003JSON(t *testing.T, stdout string) {
+	t.Helper()
 	var output ruleExplainOutput
 	if err := json.Unmarshal([]byte(stdout), &output); err != nil {
 		t.Fatalf("stdout is not valid JSON: %v\n%s", err, stdout)

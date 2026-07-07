@@ -29,6 +29,7 @@ go.work.sum
 
 # Local maintainer/Codex working context and transport archive
 .local/
+.claude/
 search-index-preflight_repo_docs/
 
 # Editor/IDE

@@ -192,7 +192,7 @@ Before tagging:
 - Do not claim binaries unless they are attached.
 - Mention that this is experimental pre-alpha.
 - Review `docs/releases/v0.0.1-prealpha.md` before copying it into GitHub release notes.
-- Current source builds may still report `0.0.0-dev` until release-time version injection or static version update is implemented.
+- Confirm `go run ./cmd/search-index-preflight version` prints `SearchIndexPreflight version 0.0.1-prealpha`.
 
 ## Tag and release notes
 

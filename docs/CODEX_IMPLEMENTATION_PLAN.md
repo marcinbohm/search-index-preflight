@@ -36,7 +36,24 @@ Not implemented:
 - diff
 - cluster mode
 
-Next expected sprint should either harden implemented rule fixtures/report coverage or implement the next small rule. Do not reimplement parser, normalizer, corpus, traversal, or rule-runner foundations.
+Next expected sprint should not implement SIL004 by default. Do not reimplement parser, normalizer, corpus, traversal, or rule-runner foundations.
+
+## Current Strategic Direction
+
+SearchIndexLint is evolving toward SearchIndexPreflight: a preflight safety CLI for Elasticsearch/OpenSearch schema changes.
+
+Do not implement SIL004 next unless explicitly approved. Do not add more heuristic static rules until the diff/preflight foundation starts.
+
+The next code phase after this documentation realignment and the dedicated rename step should focus on:
+
+- `internal/diff`
+- comparing two normalized corpora
+- basic field path diff
+- no oracle/engine-backed validation yet
+- no cluster mode
+- no cluster writes
+
+Keep existing `lint` behavior working during and after the rename. Static checks SIL001-SIL003 remain the offline-fast subset of the future preflight product.
 
 ## Working rules
 

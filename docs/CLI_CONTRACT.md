@@ -31,6 +31,23 @@ Planned but not implemented:
 - diff
 - cluster commands
 
+## Current vs Planned Commands
+
+| Command | Status | Notes |
+|---|---|---|
+| `search-index-lint lint` | Current | Static checks over supplied mappings/templates/sample docs. |
+| `search-index-lint version` | Current | Prints version information. |
+| `search-index-lint rules list` | Current stub | Command exists; full rule listing UX is not complete. |
+| `search-index-lint explain` | Current stub | Command exists; full rule explanation UX is not complete. |
+| `search-index-preflight check` | Planned after rename | Future preferred name for static checks. |
+| `search-index-preflight lint` | Planned compatibility alias | Keeps existing mental model after rename. |
+| `search-index-preflight diff` | Planned | Future preflight analysis comparing old/new schema corpora. |
+| `search-index-preflight doctor` | Planned later | Future read-only cluster inspection mode. |
+
+The repository, Go module, and binary are still named `search-index-lint`. The SearchIndexPreflight rename is planned as a separate change.
+
+No command may perform cluster write operations.
+
 ## Command overview
 
 ```text
@@ -46,8 +63,10 @@ search-index-lint
 Future:
 
 ```text
-search-index-lint cluster inspect
-search-index-lint cluster simulate
+search-index-preflight check ./schemas
+search-index-preflight lint ./schemas
+search-index-preflight diff old/ new/
+search-index-preflight doctor --url http://localhost:9200 --pattern "logs-*"
 ```
 
 ## Global flags

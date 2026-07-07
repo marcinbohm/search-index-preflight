@@ -76,6 +76,34 @@ Current CLI behavior:
 - only SIL001, SIL002, and SIL003 are implemented
 - YAML, Markdown, SARIF, baseline, diff, config, suppressions, and cluster mode are planned future work
 
+## Strategic Architecture Direction
+
+SearchIndexLint is evolving toward SearchIndexPreflight: a preflight safety CLI for Elasticsearch/OpenSearch schema changes. The current implementation remains static linting; the future direction adds change-aware and read-only operational views.
+
+Current static check pipeline:
+
+```text
+input -> parser -> normalizer -> model.Corpus -> rule runner -> report
+```
+
+Future diff pipeline:
+
+```text
+base inputs + current inputs -> normalize both -> semantic diff -> diff rules -> report
+```
+
+Future doctor pipeline:
+
+```text
+read-only cluster snapshot -> field capabilities model -> doctor rules -> report
+```
+
+The current implementation only has the static check path. `diff` and `doctor` are planned capabilities and must not be represented as implemented behavior until code exists.
+
+Current static rules remain useful as the offline-fast subset and should not be deleted. Future diff rules can build on the same parser, normalizer, canonical model, and report infrastructure.
+
+Oracle or engine-backed validation may be explored later, but it is future work, not current code. Cluster-backed modes must be read-only and must not add cluster write operations.
+
 ## Module architecture
 
 ```text

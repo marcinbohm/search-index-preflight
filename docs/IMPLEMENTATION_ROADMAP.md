@@ -15,6 +15,30 @@
 - Rule IDs must be stable.
 - Heuristics must be conservative.
 
+## Strategic Roadmap Update: Preflight Direction
+
+SearchIndexLint is evolving toward SearchIndexPreflight: a preflight safety CLI for Elasticsearch/OpenSearch schema changes.
+
+Completed foundations:
+
+- parser and normalizer foundations
+- canonical `model.Corpus`
+- rule registry and runner
+- SIL001-SIL003
+- fixtures and report tests for implemented rules
+
+Next milestones:
+
+1. finish any current dynamic-template hardening already in progress
+2. strategic rename to SearchIndexPreflight / `search-index-preflight`
+3. diff foundation
+4. first diff rules
+5. Markdown/PR report
+6. doctor/field_caps proof of concept
+7. GitHub Action/SARIF later
+
+Stop expanding state-only heuristic rules for now. Do not implement SIL004 next unless explicitly approved. The next major implementation track should be diff/preflight foundation.
+
 ## Current Implementation Status
 
 Completed foundations:
@@ -23,16 +47,17 @@ Completed foundations:
 - M1 parse-only lint foundation
 - M1.5 canonical model and traversal helpers
 - M2 rule registry and runner foundation
+- static check rules SIL001-SIL003 with fixtures and report coverage
 
 Current CLI behavior:
 
-- `lint` reports parse and normalization diagnostics only
-- no real SIL rules are implemented
-- rule execution is not wired into the CLI
+- `lint` reports parse and normalization diagnostics plus SIL001-SIL003 findings
+- rule execution is wired into the CLI
+- console and JSON reports are implemented
 
 Next:
 
-- first real rule implementation, likely SIL001, with focused tests and fixtures
+- dedicated rename step to SearchIndexPreflight, followed by diff/preflight foundation
 
 ## Pre-alpha
 

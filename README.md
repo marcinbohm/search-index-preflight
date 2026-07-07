@@ -6,11 +6,16 @@ SearchIndexLint is an offline-first CLI for linting Elasticsearch and OpenSearch
 
 It is designed for teams that treat search schemas as code and want PR-time feedback before risky changes reach production.
 
+SearchIndexLint is being evolved toward SearchIndexPreflight: a preflight CLI for Elasticsearch/OpenSearch schema changes. The current implementation remains `search-index-lint lint`; the planned rename and new command names are future work.
+
 ## Status
 
 Status: pre-alpha / foundation phase.
 
 The current CLI is not production-ready. It can parse and normalize JSON mappings/templates and JSONL/NDJSON sample documents, run the first built-in rules (`SIL001`, `SIL002`, `SIL003`), and report diagnostics/findings. Rule coverage is intentionally very limited.
+
+Current: lint/check-style static checks over supplied schema files.  
+Next strategic direction: diff/preflight analysis for schema changes before merge or deployment.
 
 ## Problem statement
 
@@ -99,6 +104,24 @@ search-index-lint explain SIL001
 
 Directory mode currently discovers only `.json`, `.jsonl`, and `.ndjson` files.
 
+## Planned Direction
+
+The planned future project name is SearchIndexPreflight / `search-index-preflight`. That rename has not happened yet.
+
+Planned future modes:
+
+```bash
+search-index-preflight check ./schemas      # planned future preferred static-check command
+search-index-preflight diff old/ new/       # planned diff/preflight analysis
+search-index-preflight doctor --url http://localhost:9200 --pattern "logs-*"  # planned later, read-only
+```
+
+These commands are not implemented today. The current working command remains:
+
+```bash
+search-index-lint lint ./schemas
+```
+
 ## Example output
 
 Current `SIL001` finding example:
@@ -166,6 +189,7 @@ Included now:
 Not implemented yet:
 
 - SIL004 and the rest of the rule catalog
+- diff/preflight analysis
 - YAML parsing
 - Markdown reporter
 - SARIF reporter
@@ -177,6 +201,8 @@ Not implemented yet:
 - config loading
 - suppressions
 - releases, Homebrew formula, and Docker image
+
+Strategic note: further state-only heuristic rule expansion is paused unless explicitly approved. The next major product track is expected to be diff/preflight foundation.
 
 ## Planned MVP scope
 
@@ -228,7 +254,7 @@ SearchIndexLint v1 is not:
 - an OpenSearch Dashboards plugin
 - a mapping generator
 - an automatic fixer
-- a cluster doctor
+- a cluster writer or automatic cluster remediator
 - a replacement for Elasticsearch/OpenSearch APIs
 - a replacement for load testing
 - a replacement for staging clusters
@@ -238,7 +264,7 @@ SearchIndexLint v1 is not:
 - a tool that requires production data
 - a tool that writes to clusters
 
-Live cluster mode is not part of the MVP. If added later, it must be read-only and explicitly separated from offline linting.
+Live cluster mode is not part of the MVP. Future doctor mode, if added, must be read-only and explicitly separated from offline linting.
 
 ## Roadmap
 

@@ -36,6 +36,8 @@ Deterministic findings may fail CI by default if severity is `error` or higher. 
 
 ## Summary
 
+`SIL001` through `SIL003` are currently implemented static checks. Further static rule expansion is paused while the diff/preflight foundation is introduced. Future diff rules may use a separate range or category; that decision is TBD. Existing rule IDs remain stable and must not be renamed during the planned SearchIndexPreflight transition.
+
 | ID | Name | Category | Stage | Severity | Determinism | FP risk |
 |---|---|---|---|---|---|---|
 | SIL001 | total-fields-limit-risk | mapping-limits | MVP implemented | error when exceeded; warning near threshold | deterministic | low |

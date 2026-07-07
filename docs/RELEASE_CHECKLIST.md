@@ -100,6 +100,7 @@ Expected:
 - `docs/RULE_CATALOG.md` lists `SIL001`-`SIL003` and `DIF001`-`DIF003`.
 - `search-index-preflight.future.example.yaml` remains clearly marked as future-only.
 - `CHANGELOG.md` does not claim a release exists before it is created.
+- Draft release notes exist at `docs/releases/v0.0.1-prealpha.md`.
 
 ## Example verification
 
@@ -190,6 +191,8 @@ Before tagging:
 - Keep a new empty `Unreleased` section above it.
 - Do not claim binaries unless they are attached.
 - Mention that this is experimental pre-alpha.
+- Review `docs/releases/v0.0.1-prealpha.md` before copying it into GitHub release notes.
+- Current source builds may still report `0.0.0-dev` until release-time version injection or static version update is implemented.
 
 ## Tag and release notes
 

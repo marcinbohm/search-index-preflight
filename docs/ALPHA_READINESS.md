@@ -14,6 +14,7 @@ For the operational pre-release verification flow, see the [Release checklist](R
 - Public fixtures use synthetic data.
 - Getting-started docs and practical examples exist.
 - Future config example is labeled as planned/not implemented.
+- Draft release notes exist at `docs/releases/v0.0.1-prealpha.md`.
 
 ## Not ready yet
 

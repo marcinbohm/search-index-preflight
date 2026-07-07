@@ -2,9 +2,16 @@ package diff
 
 import "github.com/marcinbohm/search-index-preflight/internal/model"
 
-func Compare(base model.Corpus, current model.Corpus) Result {
-	baseResources := collectResources(base)
-	currentResources := collectResources(current)
+// Compare compares two normalized corpora and returns field-level changes.
+func Compare(base model.Corpus, current model.Corpus) (Result, error) {
+	baseResources, err := collectResources(base)
+	if err != nil {
+		return Result{}, err
+	}
+	currentResources, err := collectResources(current)
+	if err != nil {
+		return Result{}, err
+	}
 
 	resourceIDs := make(map[ResourceID]struct{}, len(baseResources)+len(currentResources))
 	for resourceID := range baseResources {
@@ -20,7 +27,7 @@ func Compare(base model.Corpus, current model.Corpus) Result {
 	}
 
 	sortFieldChanges(changes)
-	return Result{FieldChanges: changes}
+	return Result{FieldChanges: changes}, nil
 }
 
 func compareResource(resourceID ResourceID, baseFields, currentFields map[FieldID]FieldSnapshot) []FieldChange {

@@ -6,7 +6,7 @@ import (
 	"github.com/marcinbohm/search-index-preflight/internal/model"
 )
 
-func collectResources(corpus model.Corpus) map[ResourceID]map[FieldID]FieldSnapshot {
+func collectResources(corpus model.Corpus) (map[ResourceID]map[FieldID]FieldSnapshot, error) {
 	resources := make(map[ResourceID]map[FieldID]FieldSnapshot)
 
 	for _, mapping := range corpus.Mappings {
@@ -15,7 +15,9 @@ func collectResources(corpus model.Corpus) map[ResourceID]map[FieldID]FieldSnaps
 			File:        sourceFile(mapping.Source),
 			JSONPointer: mapping.JSONPointer,
 		}
-		resources[resourceID] = collectMappingFields(mapping)
+		if err := addResource(resources, resourceID, collectMappingFields(mapping)); err != nil {
+			return nil, err
+		}
 	}
 
 	for _, template := range corpus.IndexTemplates {
@@ -27,7 +29,9 @@ func collectResources(corpus model.Corpus) map[ResourceID]map[FieldID]FieldSnaps
 			File:        sourceFile(template.Source),
 			JSONPointer: template.Template.Mappings.JSONPointer,
 		}
-		resources[resourceID] = collectMappingFields(*template.Template.Mappings)
+		if err := addResource(resources, resourceID, collectMappingFields(*template.Template.Mappings)); err != nil {
+			return nil, err
+		}
 	}
 
 	for _, template := range corpus.ComponentTemplates {
@@ -39,10 +43,20 @@ func collectResources(corpus model.Corpus) map[ResourceID]map[FieldID]FieldSnaps
 			File:        sourceFile(template.Source),
 			JSONPointer: template.Template.Mappings.JSONPointer,
 		}
-		resources[resourceID] = collectMappingFields(*template.Template.Mappings)
+		if err := addResource(resources, resourceID, collectMappingFields(*template.Template.Mappings)); err != nil {
+			return nil, err
+		}
 	}
 
-	return resources
+	return resources, nil
+}
+
+func addResource(resources map[ResourceID]map[FieldID]FieldSnapshot, resourceID ResourceID, fields map[FieldID]FieldSnapshot) error {
+	if _, exists := resources[resourceID]; exists {
+		return DuplicateResourceError{Resource: resourceID}
+	}
+	resources[resourceID] = fields
+	return nil
 }
 
 func collectMappingFields(mapping model.Mapping) map[FieldID]FieldSnapshot {

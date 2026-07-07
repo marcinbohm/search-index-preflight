@@ -215,6 +215,149 @@ func TestRulesListHelpReturnsSuccess(t *testing.T) {
 	}
 }
 
+func TestExplainSIL001Console(t *testing.T) {
+	code, stdout, stderr := executeForTest("explain", "SIL001")
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stderr=%s", code, exitSuccess, stderr)
+	}
+	for _, text := range []string{"SIL001", "lint", "total-fields-limit-risk", "mapping-limits", "warning", "high", "deterministic", "field-count", "total fields", "error findings when the limit is exceeded"} {
+		if !strings.Contains(stdout, text) {
+			t.Fatalf("stdout %q does not contain %q", stdout, text)
+		}
+	}
+}
+
+func TestExplainDIF001Console(t *testing.T) {
+	code, stdout, stderr := executeForTest("explain", "DIF001")
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stderr=%s", code, exitSuccess, stderr)
+	}
+	for _, text := range []string{"DIF001", "diff", "field-type-changed", "schema-diff", "error", "high", "deterministic"} {
+		if !strings.Contains(stdout, text) {
+			t.Fatalf("stdout %q does not contain %q", stdout, text)
+		}
+	}
+}
+
+func TestExplainLowercaseRuleID(t *testing.T) {
+	code, stdout, stderr := executeForTest("explain", "dif003")
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stderr=%s", code, exitSuccess, stderr)
+	}
+	for _, text := range []string{"DIF003", "field-added", "info"} {
+		if !strings.Contains(stdout, text) {
+			t.Fatalf("stdout %q does not contain %q", stdout, text)
+		}
+	}
+}
+
+func TestExplainSIL001FormatJSON(t *testing.T) {
+	code, stdout, stderr := executeForTest("explain", "SIL001", "--format", "json")
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stderr=%s", code, exitSuccess, stderr)
+	}
+
+	var output ruleExplainOutput
+	if err := json.Unmarshal([]byte(stdout), &output); err != nil {
+		t.Fatalf("stdout is not valid JSON: %v\n%s", err, stdout)
+	}
+	if output.Rule.ID != "SIL001" {
+		t.Fatalf("rule ID = %q, want SIL001", output.Rule.ID)
+	}
+	if output.Rule.Family != "lint" {
+		t.Fatalf("rule family = %q, want lint", output.Rule.Family)
+	}
+	if output.Rule.Severity != "warning" {
+		t.Fatalf("rule severity = %q, want warning", output.Rule.Severity)
+	}
+	if output.Rule.Description == "" {
+		t.Fatal("rule description is empty")
+	}
+	if len(output.Rule.Notes) == 0 {
+		t.Fatal("rule notes are empty, want SIL001 conditional severity note")
+	}
+	if !strings.Contains(output.Rule.Notes[0], "warning findings near the field-count limit") || !strings.Contains(output.Rule.Notes[0], "error findings when the limit is exceeded") {
+		t.Fatalf("SIL001 notes = %#v, want conditional severity note", output.Rule.Notes)
+	}
+}
+
+func TestExplainDIF003FormatJSON(t *testing.T) {
+	code, stdout, stderr := executeForTest("explain", "DIF003", "--format", "json")
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stderr=%s", code, exitSuccess, stderr)
+	}
+
+	var output ruleExplainOutput
+	if err := json.Unmarshal([]byte(stdout), &output); err != nil {
+		t.Fatalf("stdout is not valid JSON: %v\n%s", err, stdout)
+	}
+	if output.Rule.ID != "DIF003" {
+		t.Fatalf("rule ID = %q, want DIF003", output.Rule.ID)
+	}
+	if output.Rule.Family != "diff" {
+		t.Fatalf("rule family = %q, want diff", output.Rule.Family)
+	}
+	if output.Rule.Name != "field-added" {
+		t.Fatalf("rule name = %q, want field-added", output.Rule.Name)
+	}
+	if output.Rule.Severity != "info" {
+		t.Fatalf("rule severity = %q, want info", output.Rule.Severity)
+	}
+}
+
+func TestExplainMissingIDReturnsUsageError(t *testing.T) {
+	code, _, stderr := executeForTest("explain")
+	if code != exitUsage {
+		t.Fatalf("Execute returned %d, want %d", code, exitUsage)
+	}
+	if !strings.Contains(stderr, "requires a rule ID") {
+		t.Fatalf("stderr %q does not explain missing rule ID", stderr)
+	}
+}
+
+func TestExplainUnknownIDReturnsUsageError(t *testing.T) {
+	code, _, stderr := executeForTest("explain", "ABC999")
+	if code != exitUsage {
+		t.Fatalf("Execute returned %d, want %d", code, exitUsage)
+	}
+	if !strings.Contains(stderr, "unknown rule ID") {
+		t.Fatalf("stderr %q does not explain unknown rule ID", stderr)
+	}
+}
+
+func TestExplainTooManyArgsReturnsUsageError(t *testing.T) {
+	code, _, stderr := executeForTest("explain", "SIL001", "DIF001")
+	if code != exitUsage {
+		t.Fatalf("Execute returned %d, want %d", code, exitUsage)
+	}
+	if !strings.Contains(stderr, "exactly one rule ID") {
+		t.Fatalf("stderr %q does not explain too many args", stderr)
+	}
+}
+
+func TestExplainInvalidFormatReturnsUsageError(t *testing.T) {
+	code, _, stderr := executeForTest("explain", "SIL001", "--format", "yaml")
+	if code != exitUsage {
+		t.Fatalf("Execute returned %d, want %d", code, exitUsage)
+	}
+	if !strings.Contains(stderr, "invalid --format") {
+		t.Fatalf("stderr %q does not explain invalid format", stderr)
+	}
+}
+
+func TestExplainHelpReturnsSuccess(t *testing.T) {
+	code, stdout, stderr := executeForTest("explain", "--help")
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stderr=%s", code, exitSuccess, stderr)
+	}
+	help := stdout + stderr
+	for _, text := range []string{"--format", "<RULE_ID>"} {
+		if !strings.Contains(help, text) {
+			t.Fatalf("help output %q does not contain %q", help, text)
+		}
+	}
+}
+
 func TestLintNoInputReturnsUsageError(t *testing.T) {
 	code, _, stderr := executeForTest("lint")
 	if code != exitUsage {
@@ -1840,6 +1983,22 @@ type ruleListItemForTest struct {
 	Confidence  string `json:"confidence"`
 	Determinism string `json:"determinism"`
 	Description string `json:"description"`
+}
+
+type ruleExplainOutput struct {
+	Rule ruleExplainItemForTest `json:"rule"`
+}
+
+type ruleExplainItemForTest struct {
+	ID          string   `json:"id"`
+	Family      string   `json:"family"`
+	Name        string   `json:"name"`
+	Category    string   `json:"category"`
+	Severity    string   `json:"severity"`
+	Confidence  string   `json:"confidence"`
+	Determinism string   `json:"determinism"`
+	Description string   `json:"description"`
+	Notes       []string `json:"notes"`
 }
 
 func ruleListIDs(rules []ruleListItemForTest) []string {

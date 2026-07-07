@@ -6,9 +6,7 @@ Draft contract.
 
 Implemented behavior must match this contract unless an ADR updates it.
 
-Current pre-alpha implementation supports `lint`, minimal experimental `diff`, `version`, and `rules list`.
-
-`explain` exists as a stub.
+Current pre-alpha implementation supports `lint`, minimal experimental `diff`, `version`, `rules list`, and `explain`.
 
 Current `lint` behavior:
 
@@ -53,7 +51,7 @@ Planned but not implemented:
 | `search-index-preflight diff` | Current experimental | Minimal old/new schema comparison; currently emits `DIF001`, `DIF002`, and `DIF003`. |
 | `search-index-preflight version` | Current | Prints version information. |
 | `search-index-preflight rules list` | Current | Lists public lint and diff rule metadata. |
-| `search-index-preflight explain` | Current stub | Command exists; full rule explanation UX is not complete. |
+| `search-index-preflight explain` | Current | Explains one public lint or diff rule by ID. |
 | `search-index-preflight check` | Planned | Future preferred name for static checks. |
 | `search-index-preflight doctor` | Planned later | Future read-only cluster inspection mode. |
 
@@ -211,6 +209,31 @@ Current behavior:
 - console output includes ID, family, severity, category, and name
 - JSON output includes ID, family, name, category, severity, confidence, determinism, and description
 - shows compact rule metadata, not a full conditional severity table; for example, `SIL001` metadata is `warning`, but findings are `warning` near the field-count limit and `error` when the limit is exceeded
+- does not run rules or inspect input files
+
+## `search-index-preflight explain`
+
+Examples:
+
+```bash
+search-index-preflight explain SIL001
+search-index-preflight explain dif003
+search-index-preflight explain DIF003 --format json
+```
+
+Flags:
+
+```text
+--format <format>   console or json
+```
+
+Current behavior:
+
+- explains one public lint or diff rule by stable rule ID
+- accepts rule IDs case-insensitively and prints the canonical ID
+- supports `SIL001`, `SIL002`, `SIL003`, `DIF001`, `DIF002`, and `DIF003`
+- console output includes ID, family, name, category, severity, confidence, determinism, description, and notes when present
+- JSON output includes the same metadata under a `rule` object
 - does not run rules or inspect input files
 
 ## Input formats

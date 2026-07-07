@@ -104,6 +104,7 @@ search-index-preflight diff --base fixtures/diff/mixed-field-changes/base --curr
 search-index-preflight rules list
 search-index-preflight rules list --family diff --format json
 search-index-preflight explain SIL001
+search-index-preflight explain DIF003 --format json
 ```
 
 Directory mode currently discovers only `.json`, `.jsonl`, and `.ndjson` files.
@@ -175,6 +176,7 @@ Included now:
 - Go CLI skeleton
 - `version`, `lint`, `diff`, `rules list`, and `explain` commands
 - public rule metadata listing for lint and diff rules through `rules list`
+- public rule metadata explanation for one lint or diff rule through `explain`
 - JSON mapping/template parsing
 - JSONL/NDJSON sample document parsing with line-number diagnostics
 - directory discovery for `.json`, `.jsonl`, and `.ndjson`

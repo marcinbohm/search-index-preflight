@@ -36,7 +36,7 @@ Deterministic findings may fail CI by default if severity is `error` or higher. 
 
 ## Summary
 
-`SIL001` through `SIL003` are currently implemented static checks. Further static rule expansion is paused while the diff/preflight foundation is introduced. `DIF001`, `DIF002`, and `DIF003` are implemented for the minimal public `diff` command, but they are not emitted by `lint`. `search-index-preflight rules list` lists public metadata for these lint and diff rules. The severity shown by `rules list` is compact rule metadata; rule-specific sections below document conditional severities where applicable. Existing rule IDs remain stable and were not renamed during the SearchIndexPreflight transition.
+`SIL001` through `SIL003` are currently implemented static checks. Further static rule expansion is paused while the diff/preflight foundation is introduced. `DIF001`, `DIF002`, and `DIF003` are implemented for the minimal public `diff` command, but they are not emitted by `lint`. `search-index-preflight rules list` lists public metadata for these lint and diff rules, and `search-index-preflight explain <RULE_ID>` explains one public rule. The severity shown by metadata commands is compact rule metadata; rule-specific sections below document conditional severities where applicable. Existing rule IDs remain stable and were not renamed during the SearchIndexPreflight transition.
 
 | ID | Name | Category | Stage | Severity | Determinism | FP risk |
 |---|---|---|---|---|---|---|

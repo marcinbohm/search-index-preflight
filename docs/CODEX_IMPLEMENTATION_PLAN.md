@@ -27,6 +27,7 @@ Implemented foundations:
 - internal diff-aware rule layer with DIF001 field-type-changed, DIF002 field-removed, and DIF003 field-added
 - minimal public `diff --base --current` command
 - public `rules list` metadata output for lint and diff rules
+- public `explain <RULE_ID>` metadata output for one lint or diff rule
 
 Not implemented:
 
@@ -42,7 +43,7 @@ Not implemented:
 - migration/versioning commands or validation
 - cluster mode
 
-Next expected sprint should not implement SIL004 by default. Do not reimplement parser, normalizer, corpus, traversal, static rule-runner, internal field-diff, internal DIF001/DIF002/DIF003, minimal public diff command foundations, or `rules list` metadata output.
+Next expected sprint should not implement SIL004 by default. Do not reimplement parser, normalizer, corpus, traversal, static rule-runner, internal field-diff, internal DIF001/DIF002/DIF003, minimal public diff command foundations, `rules list` metadata output, or `explain` metadata output.
 
 ## Current Strategic Direction
 

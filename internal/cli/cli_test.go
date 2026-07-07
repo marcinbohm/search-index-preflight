@@ -1046,6 +1046,50 @@ func TestDiffOutputWritesJSONReport(t *testing.T) {
 	}
 }
 
+func TestDiffOutputWritesWarningOnlyDIF002JSONReport(t *testing.T) {
+	base := fixturePath("diff", "dif002-field-removed", "base")
+	current := fixturePath("diff", "dif002-field-removed", "current")
+	output := filepath.Join(t.TempDir(), "report.json")
+
+	code, stdout, stderr := executeForTest("diff", "--base", base, "--current", current, "--format", "json", "--output", output)
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stdout=%s stderr=%s", code, exitSuccess, stdout, stderr)
+	}
+	if stdout != "" {
+		t.Fatalf("stdout = %q, want empty when --output is used", stdout)
+	}
+
+	content, err := os.ReadFile(output)
+	if err != nil {
+		t.Fatalf("ReadFile returned error: %v", err)
+	}
+	var result model.RunResult
+	if err := json.Unmarshal(content, &result); err != nil {
+		t.Fatalf("report is not valid JSON: %v\n%s", err, string(content))
+	}
+	if len(result.Findings) != 1 {
+		t.Fatalf("findings length = %d, want 1", len(result.Findings))
+	}
+	if result.Findings[0].ID != "DIF002" {
+		t.Fatalf("finding ID = %q, want DIF002", result.Findings[0].ID)
+	}
+	if result.Findings[0].Severity != model.SeverityWarning {
+		t.Fatalf("finding severity = %q, want %q", result.Findings[0].Severity, model.SeverityWarning)
+	}
+	if result.Summary.FindingsTotal != 1 {
+		t.Fatalf("findings_total = %d, want 1", result.Summary.FindingsTotal)
+	}
+	if result.Summary.Warning != 1 {
+		t.Fatalf("summary.warning = %d, want 1", result.Summary.Warning)
+	}
+	if result.Summary.Error != 0 {
+		t.Fatalf("summary.error = %d, want 0", result.Summary.Error)
+	}
+	if result.Summary.ExitCode != exitSuccess {
+		t.Fatalf("summary.exit_code = %d, want %d", result.Summary.ExitCode, exitSuccess)
+	}
+}
+
 func TestDiffFailOnCriticalReturnsSuccessForDIF001Error(t *testing.T) {
 	base, current := writeDiffMappingFiles(t, `{"properties":{"status":{"type":"keyword"}}}`, `{"properties":{"status":{"type":"long"}}}`)
 

@@ -140,6 +140,54 @@ func TestDIF002WorksForRuntimeFieldRemoved(t *testing.T) {
 	}
 }
 
+func TestDIF002WorksForIndexTemplateFieldRemoved(t *testing.T) {
+	findings := runDIF002(t, diff.Result{
+		FieldChanges: []diff.FieldChange{
+			fieldRemovedInResource(diff.ResourceIndexTemplate, "template.json", "legacy_id", model.FieldRoleProperty, "keyword", "/template/mappings/properties/legacy_id"),
+		},
+	})
+
+	if len(findings) != 1 {
+		t.Fatalf("expected one finding, got %#v", findings)
+	}
+	if findings[0].File != "template.json" {
+		t.Fatalf("expected template file, got %q", findings[0].File)
+	}
+	if findings[0].JSONPointer != "/template/mappings/properties/legacy_id" {
+		t.Fatalf("expected field snapshot pointer, got %q", findings[0].JSONPointer)
+	}
+	if !strings.Contains(findings[0].Fingerprint, string(diff.ResourceIndexTemplate)) {
+		t.Fatalf("expected fingerprint to include resource kind, got %q", findings[0].Fingerprint)
+	}
+	if !strings.Contains(findings[0].Message, "legacy_id") {
+		t.Fatalf("expected message to contain field path, got %q", findings[0].Message)
+	}
+}
+
+func TestDIF002WorksForComponentTemplateFieldRemoved(t *testing.T) {
+	findings := runDIF002(t, diff.Result{
+		FieldChanges: []diff.FieldChange{
+			fieldRemovedInResource(diff.ResourceComponentTemplate, "component.json", "legacy_id", model.FieldRoleProperty, "keyword", "/template/mappings/properties/legacy_id"),
+		},
+	})
+
+	if len(findings) != 1 {
+		t.Fatalf("expected one finding, got %#v", findings)
+	}
+	if findings[0].File != "component.json" {
+		t.Fatalf("expected component template file, got %q", findings[0].File)
+	}
+	if findings[0].JSONPointer != "/template/mappings/properties/legacy_id" {
+		t.Fatalf("expected field snapshot pointer, got %q", findings[0].JSONPointer)
+	}
+	if !strings.Contains(findings[0].Fingerprint, string(diff.ResourceComponentTemplate)) {
+		t.Fatalf("expected fingerprint to include resource kind, got %q", findings[0].Fingerprint)
+	}
+	if !strings.Contains(findings[0].Message, "legacy_id") {
+		t.Fatalf("expected message to contain field path, got %q", findings[0].Message)
+	}
+}
+
 func TestDIF002EmitsMultipleFindingsForMultipleRemovedFields(t *testing.T) {
 	findings := runDIF002(t, diff.Result{
 		FieldChanges: []diff.FieldChange{
@@ -169,9 +217,13 @@ func runDIF002(t *testing.T, result diff.Result) []model.Finding {
 }
 
 func fieldRemoved(path string, role model.FieldRole, typ string, beforePointer string) diff.FieldChange {
+	return fieldRemovedInResource(diff.ResourceMapping, "mapping.json", path, role, typ, beforePointer)
+}
+
+func fieldRemovedInResource(resourceKind diff.ResourceKind, file string, path string, role model.FieldRole, typ string, beforePointer string) diff.FieldChange {
 	return diff.FieldChange{
 		Kind:     diff.ChangeFieldRemoved,
-		Resource: diff.ResourceID{Kind: diff.ResourceMapping, File: "mapping.json"},
+		Resource: diff.ResourceID{Kind: resourceKind, File: file},
 		Field:    diff.FieldID{Path: path, Role: role},
 		Before:   snapshot(path, role, typ, beforePointer),
 	}

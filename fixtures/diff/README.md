@@ -8,4 +8,4 @@ Current diff coverage is intentionally small:
 - `dif002-field-removed/` emits one `DIF002` warning finding.
 - `no-changes/` emits no diagnostics or findings.
 
-The diff command currently matches directory inputs by relative path and emits `DIF001` and `DIF002`.
+The diff command currently matches directory inputs by relative path and emits `DIF001` and `DIF002`. Renamed files are not matched.

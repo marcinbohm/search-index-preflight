@@ -148,6 +148,30 @@ func TestRunExecutesBuiltinDiffRules(t *testing.T) {
 	}
 }
 
+func TestRunGroupsFindingsByRuleOrder(t *testing.T) {
+	registry, err := BuiltinRegistry()
+	if err != nil {
+		t.Fatalf("BuiltinRegistry returned error: %v", err)
+	}
+
+	result, err := Run(Context{}, registry, RunRequest{Result: diff.Result{
+		FieldChanges: []diff.FieldChange{
+			fieldRemoved("legacy_id", model.FieldRoleProperty, "keyword", "/properties/legacy_id"),
+			fieldTypeChanged("status", model.FieldRoleProperty, "keyword", "long", "/properties/status", "/properties/status"),
+		},
+	}})
+	if err != nil {
+		t.Fatalf("Run returned error: %v", err)
+	}
+
+	if len(result.Findings) != 2 {
+		t.Fatalf("expected two findings, got %#v", result.Findings)
+	}
+	if result.Findings[0].ID != "DIF001" || result.Findings[1].ID != "DIF002" {
+		t.Fatalf("expected grouped-by-rule order DIF001 then DIF002, got %#v", result.Findings)
+	}
+}
+
 func TestDiffCompareToDIF001Integration(t *testing.T) {
 	base := corpusWithMapping(property("status", "keyword"))
 	current := corpusWithMapping(property("status", "long"))

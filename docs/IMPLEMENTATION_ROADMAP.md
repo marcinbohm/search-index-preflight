@@ -26,15 +26,15 @@ Completed foundations:
 - rule registry and runner
 - SIL001-SIL003
 - fixtures and report tests for implemented rules
+- internal diff foundation for field added/removed/type-changed changes
 
 Next milestones:
 
-1. finish any current dynamic-template hardening already in progress
-2. diff foundation
-3. first diff rules
-4. Markdown/PR report
-5. doctor/field_caps proof of concept
-6. GitHub Action/SARIF later
+1. decide whether to expose a minimal public `diff` command or add the first internal diff rules
+2. first diff rules
+3. Markdown/PR report
+4. doctor/field_caps proof of concept
+5. GitHub Action/SARIF later
 
 Stop expanding state-only heuristic rules for now. Do not implement SIL004 next unless explicitly approved. The next major implementation track should be diff/preflight foundation.
 
@@ -47,16 +47,18 @@ Completed foundations:
 - M1.5 canonical model and traversal helpers
 - M2 rule registry and runner foundation
 - static check rules SIL001-SIL003 with fixtures and report coverage
+- internal diff foundation for comparing normalized field changes
 
 Current CLI behavior:
 
 - `lint` reports parse and normalization diagnostics plus SIL001-SIL003 findings
 - rule execution is wired into the CLI
 - console and JSON reports are implemented
+- no public `diff` command is implemented yet
 
 Next:
 
-- diff/preflight foundation
+- public diff command or first diff rules, depending on review direction
 
 ## Pre-alpha
 

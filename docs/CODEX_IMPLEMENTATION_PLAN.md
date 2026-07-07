@@ -23,6 +23,7 @@ Implemented foundations:
 - built-in rule: SIL001 total fields limit risk
 - built-in rule: SIL002 root dynamic enabled
 - built-in rule: SIL003 dynamic template missing match_mapping_type
+- internal diff foundation for field added/removed/type-changed changes
 
 Not implemented:
 
@@ -33,10 +34,11 @@ Not implemented:
 - SARIF
 - Markdown reporter
 - baseline
-- diff
+- public `diff` command
+- diff rules/findings
 - cluster mode
 
-Next expected sprint should not implement SIL004 by default. Do not reimplement parser, normalizer, corpus, traversal, or rule-runner foundations.
+Next expected sprint should not implement SIL004 by default. Do not reimplement parser, normalizer, corpus, traversal, rule-runner, or internal field-diff foundations.
 
 ## Current Strategic Direction
 
@@ -44,11 +46,10 @@ SearchIndexPreflight is a preflight safety CLI for Elasticsearch/OpenSearch sche
 
 Do not implement SIL004 next unless explicitly approved. Do not add more heuristic static rules until the diff/preflight foundation starts.
 
-The next code phase after this documentation realignment and the dedicated rename step should focus on:
+The current internal diff foundation compares two normalized corpora and detects field added, field removed, and field type changed events. The next code phase should choose one of these review-approved paths:
 
-- `internal/diff`
-- comparing two normalized corpora
-- basic field path diff
+- expose a minimal public `diff` command
+- add the first diff-aware rule layer over `internal/diff`
 - no oracle/engine-backed validation yet
 - no cluster mode
 - no cluster writes

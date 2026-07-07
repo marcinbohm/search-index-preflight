@@ -1,0 +1,11 @@
+{
+  "id": "DIF003",
+  "name": "field-added",
+  "severity": "info",
+  "category": "schema-diff",
+  "file": "mapping.json",
+  "json_pointer": "/properties/customer_id",
+  "message_contains": [
+    "customer_id"
+  ]
+}

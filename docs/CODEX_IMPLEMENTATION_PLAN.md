@@ -24,7 +24,7 @@ Implemented foundations:
 - built-in rule: SIL002 root dynamic enabled
 - built-in rule: SIL003 dynamic template missing match_mapping_type
 - internal diff foundation for field added/removed/type-changed changes
-- internal diff-aware rule layer with DIF001 field-type-changed and DIF002 field-removed
+- internal diff-aware rule layer with DIF001 field-type-changed, DIF002 field-removed, and DIF003 field-added
 - minimal public `diff --base --current` command
 
 Not implemented:
@@ -37,10 +37,10 @@ Not implemented:
 - Markdown reporter
 - baseline
 - git-aware diff options
-- diff rules beyond DIF001/DIF002
+- diff rules beyond DIF001/DIF002/DIF003
 - cluster mode
 
-Next expected sprint should not implement SIL004 by default. Do not reimplement parser, normalizer, corpus, traversal, static rule-runner, internal field-diff, internal DIF001/DIF002, or minimal public diff command foundations.
+Next expected sprint should not implement SIL004 by default. Do not reimplement parser, normalizer, corpus, traversal, static rule-runner, internal field-diff, internal DIF001/DIF002/DIF003, or minimal public diff command foundations.
 
 ## Current Strategic Direction
 
@@ -48,7 +48,7 @@ SearchIndexPreflight is a preflight safety CLI for Elasticsearch/OpenSearch sche
 
 Do not implement SIL004 next unless explicitly approved. Do not add more heuristic static rules until the diff/preflight foundation starts.
 
-The current diff foundation compares two normalized corpora and detects field added, field removed, and field type changed events. The public `diff` command currently emits DIF001 for field type changes and DIF002 for field removals. The next code phase should choose one of these review-approved paths:
+The current diff foundation compares two normalized corpora and detects field added, field removed, and field type changed events. The public `diff` command currently emits DIF001 for field type changes, DIF002 for field removals, and DIF003 for field additions. The next code phase should choose one of these review-approved paths:
 
 - harden minimal public diff behavior and fixtures
 - harden the internal diff-rule layer further

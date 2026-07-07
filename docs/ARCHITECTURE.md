@@ -75,16 +75,16 @@ Implemented foundations:
 - internal diff-aware rule layer in `internal/diffrules`
 - rule registry and runner foundation
 - built-in rules: `SIL001`, `SIL002`, `SIL003`
-- diff rules: `DIF001`, `DIF002`
+- diff rules: `DIF001`, `DIF002`, `DIF003`
 - console and JSON diagnostic reports
 
 Current CLI behavior:
 
 - `lint` reports parse/normalization diagnostics plus SIL001/SIL002/SIL003 findings
-- `diff` compares base/current schema inputs and reports DIF001/DIF002 findings
+- `diff` compares base/current schema inputs and reports DIF001/DIF002/DIF003 findings
 - rule execution runs only after parse and normalization succeed
-- only SIL001, SIL002, SIL003, DIF001, and DIF002 are implemented
-- `DIF001` and `DIF002` are emitted only by `diff`, not by `lint`
+- only SIL001, SIL002, SIL003, DIF001, DIF002, and DIF003 are implemented
+- `DIF001`, `DIF002`, and `DIF003` are emitted only by `diff`, not by `lint`
 - deeper diff rules, YAML, Markdown, SARIF, baseline, config, suppressions, and cluster mode are planned future work
 
 ## Strategic Architecture Direction
@@ -103,7 +103,7 @@ Current minimal public diff pipeline:
 base inputs + current inputs -> normalize both -> semantic diff -> diff rules -> report
 ```
 
-The current implementation exposes this pipeline for `DIF001` field type changes and `DIF002` field removals. It does not support field-added findings, git refs, settings/alias diffs, dynamic template diffs, composed template analysis, sample document comparison, or cluster-backed validation yet.
+The current implementation exposes this pipeline for `DIF001` field type changes, `DIF002` field removals, and `DIF003` field additions. It does not support git refs, settings/alias diffs, dynamic template diffs, composed template analysis, sample document comparison, or cluster-backed validation yet.
 
 Future doctor pipeline:
 

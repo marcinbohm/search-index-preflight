@@ -120,7 +120,7 @@ func writeDiffHelp(w io.Writer) {
   search-index-preflight diff --base <path> --current <path> [flags]
 
 Compare two schema inputs and report preflight diff findings.
-This minimal experimental command currently emits DIF001 field type changes and DIF002 field removals.
+This minimal experimental command currently emits DIF001 field type changes, DIF002 field removals, and DIF003 field additions.
 
 Flags:
   --base <path>       Base schema file or directory

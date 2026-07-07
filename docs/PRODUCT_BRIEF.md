@@ -61,7 +61,7 @@ Secondary users:
 
 ### PR-time schema preflight
 
-A developer changes an index template or mapping. SearchIndexPreflight runs in CI and reports static risks today. The minimal experimental diff mode can compare old and new schema states for field type changes and removed fields before merge.
+A developer changes an index template or mapping. SearchIndexPreflight runs in CI and reports static risks today. The minimal experimental diff mode can compare old and new schema states for field type changes, removed fields, and added fields before merge.
 
 ### Offline mapping/template risk review
 
@@ -80,7 +80,7 @@ A maintainer or CI workflow compares the current repository schema with a propos
 search-index-preflight diff --base old/ --current new/
 ```
 
-This is minimal experimental behavior. It currently emits `DIF001` field type changes and `DIF002` field removals; broader diff analysis is still planned.
+This is minimal experimental behavior. It currently emits `DIF001` field type changes, `DIF002` field removals, and `DIF003` field additions; broader diff analysis is still planned.
 
 ### Sample document compatibility checks
 

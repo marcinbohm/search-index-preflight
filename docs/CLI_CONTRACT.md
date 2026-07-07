@@ -27,6 +27,7 @@ Current `diff` behavior:
 - compares normalized corpora with `internal/diff`
 - emits `DIF001` field type changed findings
 - emits `DIF002` field removed warning findings
+- emits `DIF003` field added info findings
 - supports `--format console|json`, `--output`, and `--fail-on`
 
 Planned but not implemented:
@@ -39,7 +40,7 @@ Planned but not implemented:
 - suppressions
 - baseline
 - git-aware diff options
-- diff rules beyond `DIF001`/`DIF002`
+- diff rules beyond `DIF001`/`DIF002`/`DIF003`
 - cluster commands
 
 ## Current vs Planned Commands
@@ -47,7 +48,7 @@ Planned but not implemented:
 | Command | Status | Notes |
 |---|---|---|
 | `search-index-preflight lint` | Current; future compatibility alias | Static checks over supplied mappings/templates/sample docs. |
-| `search-index-preflight diff` | Current experimental | Minimal old/new schema comparison; currently emits `DIF001` and `DIF002`. |
+| `search-index-preflight diff` | Current experimental | Minimal old/new schema comparison; currently emits `DIF001`, `DIF002`, and `DIF003`. |
 | `search-index-preflight version` | Current | Prints version information. |
 | `search-index-preflight rules list` | Current stub | Command exists; full rule listing UX is not complete. |
 | `search-index-preflight explain` | Current stub | Command exists; full rule explanation UX is not complete. |
@@ -154,6 +155,7 @@ search-index-preflight diff --base old/ --current new/
 search-index-preflight diff --base old/mapping.json --current new/mapping.json --format json
 search-index-preflight diff --base fixtures/diff/dif001-field-type-changed/base --current fixtures/diff/dif001-field-type-changed/current
 search-index-preflight diff --base fixtures/diff/dif002-field-removed/base --current fixtures/diff/dif002-field-removed/current --fail-on warning
+search-index-preflight diff --base fixtures/diff/dif003-field-added/base --current fixtures/diff/dif003-field-added/current --fail-on info
 ```
 
 Flags:
@@ -170,10 +172,11 @@ Current limitations:
 
 - emits `DIF001 field-type-changed`
 - emits `DIF002 field-removed` as a warning; it does not fail with default `--fail-on error`
+- emits `DIF003 field-added` as info; it does not fail with default `--fail-on error` or `--fail-on warning`
 - explicit file-vs-file inputs are compared as one logical resource, even when filenames differ
 - directory-vs-directory inputs are matched by relative path
 - file-vs-directory inputs are path-based and limited
-- no rename detection; renamed schema files may be reported as removed fields from the old relative path rather than matched as the same resource
+- no rename detection; renamed schema files may be reported as removed fields from the old relative path and added fields from the new relative path rather than matched as the same resource
 - no git refs or `--base origin/main`
 - no Markdown or SARIF output
 - no settings, aliases, dynamic template, template priority, composed template, sample document, or cluster-backed comparison

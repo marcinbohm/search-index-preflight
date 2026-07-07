@@ -9,18 +9,18 @@ import (
 	"github.com/marcinbohm/search-index-preflight/internal/model"
 )
 
-func TestBuiltinRegistryContainsDIF001AndDIF002(t *testing.T) {
+func TestBuiltinRegistryContainsDIF001DIF002AndDIF003(t *testing.T) {
 	registry, err := BuiltinRegistry()
 	if err != nil {
 		t.Fatalf("BuiltinRegistry returned error: %v", err)
 	}
 
 	rules := registry.List()
-	if len(rules) != 2 {
-		t.Fatalf("expected two built-in diff rules, got %d", len(rules))
+	if len(rules) != 3 {
+		t.Fatalf("expected three built-in diff rules, got %d", len(rules))
 	}
-	ids := []string{rules[0].Metadata().ID, rules[1].Metadata().ID}
-	want := []string{"DIF001", "DIF002"}
+	ids := []string{rules[0].Metadata().ID, rules[1].Metadata().ID, rules[2].Metadata().ID}
+	want := []string{"DIF001", "DIF002", "DIF003"}
 	for i := range want {
 		if ids[i] != want[i] {
 			t.Fatalf("rule IDs = %#v, want %#v", ids, want)
@@ -131,20 +131,24 @@ func TestRunExecutesBuiltinDiffRules(t *testing.T) {
 		FieldChanges: []diff.FieldChange{
 			fieldTypeChanged("status", model.FieldRoleProperty, "keyword", "long", "/properties/status", "/properties/status"),
 			fieldRemoved("legacy_id", model.FieldRoleProperty, "keyword", "/properties/legacy_id"),
+			fieldAdded("customer_id", model.FieldRoleProperty, "keyword", "/properties/customer_id"),
 		},
 	}})
 	if err != nil {
 		t.Fatalf("Run returned error: %v", err)
 	}
 
-	if len(result.Findings) != 2 {
-		t.Fatalf("expected two findings, got %#v", result.Findings)
+	if len(result.Findings) != 3 {
+		t.Fatalf("expected three findings, got %#v", result.Findings)
 	}
 	if result.Findings[0].ID != "DIF001" {
 		t.Fatalf("expected DIF001 finding, got %q", result.Findings[0].ID)
 	}
 	if result.Findings[1].ID != "DIF002" {
 		t.Fatalf("expected DIF002 finding, got %q", result.Findings[1].ID)
+	}
+	if result.Findings[2].ID != "DIF003" {
+		t.Fatalf("expected DIF003 finding, got %q", result.Findings[2].ID)
 	}
 }
 
@@ -156,6 +160,7 @@ func TestRunGroupsFindingsByRuleOrder(t *testing.T) {
 
 	result, err := Run(Context{}, registry, RunRequest{Result: diff.Result{
 		FieldChanges: []diff.FieldChange{
+			fieldAdded("customer_id", model.FieldRoleProperty, "keyword", "/properties/customer_id"),
 			fieldRemoved("legacy_id", model.FieldRoleProperty, "keyword", "/properties/legacy_id"),
 			fieldTypeChanged("status", model.FieldRoleProperty, "keyword", "long", "/properties/status", "/properties/status"),
 		},
@@ -164,11 +169,11 @@ func TestRunGroupsFindingsByRuleOrder(t *testing.T) {
 		t.Fatalf("Run returned error: %v", err)
 	}
 
-	if len(result.Findings) != 2 {
-		t.Fatalf("expected two findings, got %#v", result.Findings)
+	if len(result.Findings) != 3 {
+		t.Fatalf("expected three findings, got %#v", result.Findings)
 	}
-	if result.Findings[0].ID != "DIF001" || result.Findings[1].ID != "DIF002" {
-		t.Fatalf("expected grouped-by-rule order DIF001 then DIF002, got %#v", result.Findings)
+	if result.Findings[0].ID != "DIF001" || result.Findings[1].ID != "DIF002" || result.Findings[2].ID != "DIF003" {
+		t.Fatalf("expected grouped-by-rule order DIF001, DIF002, DIF003, got %#v", result.Findings)
 	}
 }
 
@@ -221,6 +226,32 @@ func TestDiffCompareToDIF002Integration(t *testing.T) {
 	}
 	if runResult.Findings[0].ID != "DIF002" {
 		t.Fatalf("expected DIF002, got %q", runResult.Findings[0].ID)
+	}
+}
+
+func TestDiffCompareToDIF003Integration(t *testing.T) {
+	base := corpusWithMapping(property("status", "keyword"))
+	current := corpusWithMapping(property("status", "keyword"), property("customer_id", "keyword"))
+
+	diffResult, err := diff.Compare(base, current)
+	if err != nil {
+		t.Fatalf("diff.Compare returned error: %v", err)
+	}
+	registry, err := BuiltinRegistry()
+	if err != nil {
+		t.Fatalf("BuiltinRegistry returned error: %v", err)
+	}
+
+	runResult, err := Run(Context{}, registry, RunRequest{Result: diffResult})
+	if err != nil {
+		t.Fatalf("Run returned error: %v", err)
+	}
+
+	if len(runResult.Findings) != 1 {
+		t.Fatalf("expected one finding, got %#v", runResult.Findings)
+	}
+	if runResult.Findings[0].ID != "DIF003" {
+		t.Fatalf("expected DIF003, got %q", runResult.Findings[0].ID)
 	}
 }
 

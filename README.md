@@ -86,7 +86,7 @@ go run ./cmd/search-index-preflight lint --mapping examples/basic/mapping.json
 
 ## Current Usage
 
-Current pre-alpha behavior parses JSON mappings/templates and JSONL/NDJSON sample documents, normalizes supported schema shapes into internal models, runs `SIL001`, `SIL002`, and `SIL003` for static linting, and can run `DIF001` and `DIF002` through the experimental `diff` command.
+Current pre-alpha behavior parses JSON mappings/templates and JSONL/NDJSON sample documents, normalizes supported schema shapes into internal models, runs `SIL001`, `SIL002`, and `SIL003` for static linting, and can run `DIF001`, `DIF002`, and `DIF003` through the experimental `diff` command.
 
 ```bash
 search-index-preflight lint --mapping mapping.json
@@ -99,15 +99,16 @@ search-index-preflight lint ./schemas
 search-index-preflight diff --base old-schemas/ --current new-schemas/
 search-index-preflight diff --base fixtures/diff/dif001-field-type-changed/base --current fixtures/diff/dif001-field-type-changed/current
 search-index-preflight diff --base fixtures/diff/dif002-field-removed/base --current fixtures/diff/dif002-field-removed/current
+search-index-preflight diff --base fixtures/diff/dif003-field-added/base --current fixtures/diff/dif003-field-added/current
 search-index-preflight rules list
 search-index-preflight explain SIL001
 ```
 
 Directory mode currently discovers only `.json`, `.jsonl`, and `.ndjson` files.
 
-The experimental `diff` command currently emits `DIF001` field type changes and `DIF002` field removals. `DIF002` is a warning and does not fail by default with `--fail-on error`; use `--fail-on warning` to fail on removed fields. Diff does not support git refs, PR comments, settings/alias diffs, dynamic template diffs, composed template analysis, sample document comparison, or cluster-backed validation.
+The experimental `diff` command currently emits `DIF001` field type changes, `DIF002` field removals, and `DIF003` field additions. `DIF002` is a warning and `DIF003` is info, so neither fails by default with `--fail-on error`; use `--fail-on warning` to fail on removed fields or `--fail-on info` to fail on added fields. Diff does not support git refs, PR comments, settings/alias diffs, dynamic template diffs, composed template analysis, sample document comparison, or cluster-backed validation.
 
-Diff matching is intentionally simple: explicit file-vs-file inputs are compared as one logical resource even when filenames differ, while directory-vs-directory inputs are matched by relative path. File-vs-directory behavior is path-based and limited. Because rename detection is not implemented, renamed schema files may be reported as removed fields from the old relative path rather than matched as the same resource.
+Diff matching is intentionally simple: explicit file-vs-file inputs are compared as one logical resource even when filenames differ, while directory-vs-directory inputs are matched by relative path. File-vs-directory behavior is path-based and limited. Because rename detection is not implemented, renamed schema files may be reported as removed fields from the old relative path and added fields from the new relative path rather than matched as the same resource.
 
 ## Planned Direction
 
@@ -191,11 +192,12 @@ Included now:
 - experimental `diff --base <path> --current <path>` command
 - first diff rule: `DIF001` field type changed
 - second diff rule: `DIF002` field removed
+- third diff rule: `DIF003` field added
 
 Not implemented yet:
 
 - SIL004 and the rest of the rule catalog
-- deeper diff/preflight analysis beyond DIF001/DIF002
+- deeper diff/preflight analysis beyond DIF001/DIF002/DIF003
 - YAML parsing
 - Markdown reporter
 - SARIF reporter

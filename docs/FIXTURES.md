@@ -141,10 +141,9 @@ They cover:
 - `SIL002` root-level explicit `dynamic: true` behavior with synthetic mappings and an expected JSON report
 - `SIL003` missing `match_mapping_type` behavior with synthetic dynamic templates and an expected JSON report
 
-Existing fixtures cover static check rules. Future preflight fixture areas should include:
+Existing fixtures cover static check rules and the minimal public diff rules. Future preflight fixture areas should include:
 
 ```text
-fixtures/diff/
 fixtures/doctor/
 fixtures/templategraph/
 ```

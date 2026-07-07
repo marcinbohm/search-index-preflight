@@ -27,7 +27,7 @@ Completed foundations:
 - SIL001-SIL003
 - fixtures and report tests for implemented rules
 - internal diff foundation for field added/removed/type-changed changes
-- internal diff-aware rule layer with DIF001/DIF002
+- internal diff-aware rule layer with DIF001/DIF002/DIF003
 - minimal public `diff --base --current` command
 
 Next milestones:
@@ -50,16 +50,16 @@ Completed foundations:
 - M2 rule registry and runner foundation
 - static check rules SIL001-SIL003 with fixtures and report coverage
 - internal diff foundation for comparing normalized field changes
-- internal diff-aware rule layer with DIF001 field-type-changed and DIF002 field-removed
-- minimal public diff command emitting DIF001/DIF002
+- internal diff-aware rule layer with DIF001 field-type-changed, DIF002 field-removed, and DIF003 field-added
+- minimal public diff command emitting DIF001/DIF002/DIF003
 
 Current CLI behavior:
 
 - `lint` reports parse and normalization diagnostics plus SIL001-SIL003 findings
-- `diff --base <path> --current <path>` reports DIF001 field type change findings and DIF002 field removed warnings
+- `diff --base <path> --current <path>` reports DIF001 field type change findings, DIF002 field removed warnings, and DIF003 field added info findings
 - rule execution is wired into the CLI
 - console and JSON reports are implemented
-- DIF001/DIF002 are not emitted by `lint`
+- DIF001/DIF002/DIF003 are not emitted by `lint`
 
 Next:
 

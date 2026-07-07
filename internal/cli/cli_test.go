@@ -804,6 +804,56 @@ func TestDiffDIF002FixtureJSONMatchesExpectedFindingFields(t *testing.T) {
 	assertFindingMatchesExpected(t, result.Findings[0], expected)
 }
 
+func TestDiffDIF003FixtureEmitsInfoFinding(t *testing.T) {
+	base := fixturePath("diff", "dif003-field-added", "base")
+	current := fixturePath("diff", "dif003-field-added", "current")
+
+	code, stdout, stderr := executeForTest("diff", "--base", base, "--current", current)
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stdout=%s stderr=%s", code, exitSuccess, stdout, stderr)
+	}
+	for _, text := range []string{"DIF003", "info", "customer_id"} {
+		if !strings.Contains(stdout, text) {
+			t.Fatalf("stdout %q does not contain %q", stdout, text)
+		}
+	}
+}
+
+func TestDiffDIF003FixtureJSONMatchesExpectedFindingFields(t *testing.T) {
+	base := fixturePath("diff", "dif003-field-added", "base")
+	current := fixturePath("diff", "dif003-field-added", "current")
+	expected := readExpectedFinding(t, fixturePath("diff", "dif003-field-added", "expected.finding.json"))
+
+	code, stdout, stderr := executeForTest("diff", "--base", base, "--current", current, "--format", "json")
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stdout=%s stderr=%s", code, exitSuccess, stdout, stderr)
+	}
+
+	var result model.RunResult
+	if err := json.Unmarshal([]byte(stdout), &result); err != nil {
+		t.Fatalf("stdout is not valid JSON: %v\n%s", err, stdout)
+	}
+	if result.Summary.FindingsTotal != 1 {
+		t.Fatalf("findings_total = %d, want 1", result.Summary.FindingsTotal)
+	}
+	if result.Summary.Info != 1 {
+		t.Fatalf("summary.info = %d, want 1", result.Summary.Info)
+	}
+	if result.Summary.Warning != 0 {
+		t.Fatalf("summary.warning = %d, want 0", result.Summary.Warning)
+	}
+	if result.Summary.Error != 0 {
+		t.Fatalf("summary.error = %d, want 0", result.Summary.Error)
+	}
+	if result.Summary.ExitCode != exitSuccess {
+		t.Fatalf("summary.exit_code = %d, want %d", result.Summary.ExitCode, exitSuccess)
+	}
+	if len(result.Findings) != 1 {
+		t.Fatalf("findings length = %d, want 1", len(result.Findings))
+	}
+	assertFindingMatchesExpected(t, result.Findings[0], expected)
+}
+
 func TestDiffNoChangesFixtureReturnsSuccess(t *testing.T) {
 	base := fixturePath("diff", "no-changes", "base")
 	current := fixturePath("diff", "no-changes", "current")
@@ -833,6 +883,9 @@ func TestDiffDirectoryDifferentFilenamesDoesNotAlignAsTypeChange(t *testing.T) {
 	}
 	if !strings.Contains(stdout, "DIF002") {
 		t.Fatalf("stdout %q does not report removed field warning for unmatched base resource", stdout)
+	}
+	if !strings.Contains(stdout, "DIF003") {
+		t.Fatalf("stdout %q does not report added field info for unmatched current resource", stdout)
 	}
 }
 
@@ -1003,15 +1056,107 @@ func TestDiffFormatJSONWithDIF002Finding(t *testing.T) {
 	}
 }
 
-func TestLintDoesNotEmitDIF002(t *testing.T) {
+func TestDiffFieldAddedReturnsInfoByDefault(t *testing.T) {
+	base, current := writeDiffMappingFiles(t, `{"properties":{"status":{"type":"keyword"}}}`, `{"properties":{"status":{"type":"keyword"},"customer_id":{"type":"keyword"}}}`)
+
+	code, stdout, stderr := executeForTest("diff", "--base", base, "--current", current)
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stdout=%s stderr=%s", code, exitSuccess, stdout, stderr)
+	}
+	for _, text := range []string{"DIF003", "customer_id", "info"} {
+		if !strings.Contains(stdout, text) {
+			t.Fatalf("stdout %q does not contain %q", stdout, text)
+		}
+	}
+}
+
+func TestDiffFieldAddedDoesNotFailWithFailOnWarning(t *testing.T) {
+	base, current := writeDiffMappingFiles(t, `{"properties":{"status":{"type":"keyword"}}}`, `{"properties":{"status":{"type":"keyword"},"customer_id":{"type":"keyword"}}}`)
+
+	code, stdout, stderr := executeForTest("diff", "--base", base, "--current", current, "--fail-on", "warning")
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stdout=%s stderr=%s", code, exitSuccess, stdout, stderr)
+	}
+	if !strings.Contains(stdout, "DIF003") {
+		t.Fatalf("stdout %q does not contain DIF003", stdout)
+	}
+}
+
+func TestDiffFieldAddedFailsWithFailOnInfo(t *testing.T) {
+	base, current := writeDiffMappingFiles(t, `{"properties":{"status":{"type":"keyword"}}}`, `{"properties":{"status":{"type":"keyword"},"customer_id":{"type":"keyword"}}}`)
+
+	code, stdout, stderr := executeForTest("diff", "--base", base, "--current", current, "--fail-on", "info")
+	if code != exitFindings {
+		t.Fatalf("Execute returned %d, want %d; stdout=%s stderr=%s", code, exitFindings, stdout, stderr)
+	}
+	if !strings.Contains(stdout, "DIF003") {
+		t.Fatalf("stdout %q does not contain DIF003", stdout)
+	}
+}
+
+func TestDiffFormatJSONWithDIF003Finding(t *testing.T) {
+	base, current := writeDiffMappingFiles(t, `{"properties":{"status":{"type":"keyword"}}}`, `{"properties":{"status":{"type":"keyword"},"customer_id":{"type":"keyword"}}}`)
+
+	code, stdout, stderr := executeForTest("diff", "--base", base, "--current", current, "--format", "json")
+	if code != exitSuccess {
+		t.Fatalf("Execute returned %d, want %d; stderr=%s", code, exitSuccess, stderr)
+	}
+
+	var result model.RunResult
+	if err := json.Unmarshal([]byte(stdout), &result); err != nil {
+		t.Fatalf("stdout is not valid JSON: %v\n%s", err, stdout)
+	}
+	if result.Summary.FindingsTotal != 1 {
+		t.Fatalf("findings_total = %d, want 1", result.Summary.FindingsTotal)
+	}
+	if result.Summary.Info != 1 {
+		t.Fatalf("summary.info = %d, want 1", result.Summary.Info)
+	}
+	if result.Summary.Warning != 0 {
+		t.Fatalf("summary.warning = %d, want 0", result.Summary.Warning)
+	}
+	if result.Summary.Error != 0 {
+		t.Fatalf("summary.error = %d, want 0", result.Summary.Error)
+	}
+	if result.Summary.ExitCode != exitSuccess {
+		t.Fatalf("summary.exit_code = %d, want %d", result.Summary.ExitCode, exitSuccess)
+	}
+	if len(result.Findings) != 1 {
+		t.Fatalf("findings length = %d, want 1", len(result.Findings))
+	}
+	finding := result.Findings[0]
+	if finding.ID != "DIF003" {
+		t.Fatalf("finding ID = %q, want DIF003", finding.ID)
+	}
+	if finding.Severity != model.SeverityInfo {
+		t.Fatalf("finding severity = %q, want %q", finding.Severity, model.SeverityInfo)
+	}
+	if finding.Category != "schema-diff" {
+		t.Fatalf("finding category = %q, want schema-diff", finding.Category)
+	}
+	if result.Diagnostics == nil {
+		t.Fatal("diagnostics is nil, want empty slice")
+	}
+	if len(result.Diagnostics) != 0 {
+		t.Fatalf("diagnostics length = %d, want 0", len(result.Diagnostics))
+	}
+}
+
+func TestLintDoesNotEmitDiffRules(t *testing.T) {
 	path := writeTempFile(t, "mapping.json", `{"properties":{"status":{"type":"keyword"}}}`)
 
 	code, stdout, stderr := executeForTest("lint", "--mapping", path)
 	if code != exitSuccess {
 		t.Fatalf("Execute returned %d, want %d; stdout=%s stderr=%s", code, exitSuccess, stdout, stderr)
 	}
+	if strings.Contains(stdout, "DIF001") {
+		t.Fatalf("stdout contains unexpected DIF001 from lint: %s", stdout)
+	}
 	if strings.Contains(stdout, "DIF002") {
 		t.Fatalf("stdout contains unexpected DIF002 from lint: %s", stdout)
+	}
+	if strings.Contains(stdout, "DIF003") {
+		t.Fatalf("stdout contains unexpected DIF003 from lint: %s", stdout)
 	}
 }
 
@@ -1173,6 +1318,9 @@ func TestDiffInvalidBaseJSONShortCircuitsDiff(t *testing.T) {
 	if strings.Contains(stdout, "DIF002") {
 		t.Fatalf("stdout contains diff finding despite parse error: %s", stdout)
 	}
+	if strings.Contains(stdout, "DIF003") {
+		t.Fatalf("stdout contains diff finding despite parse error: %s", stdout)
+	}
 }
 
 func TestDiffInvalidCurrentJSONShortCircuitsDiff(t *testing.T) {
@@ -1189,6 +1337,9 @@ func TestDiffInvalidCurrentJSONShortCircuitsDiff(t *testing.T) {
 		t.Fatalf("stdout contains diff finding despite parse error: %s", stdout)
 	}
 	if strings.Contains(stdout, "DIF002") {
+		t.Fatalf("stdout contains diff finding despite parse error: %s", stdout)
+	}
+	if strings.Contains(stdout, "DIF003") {
 		t.Fatalf("stdout contains diff finding despite parse error: %s", stdout)
 	}
 }
@@ -1210,6 +1361,9 @@ func TestDiffBothInvalidJSONReportsBothFiles(t *testing.T) {
 		t.Fatalf("stdout contains diff finding despite parse error: %s", stdout)
 	}
 	if strings.Contains(stdout, "DIF002") {
+		t.Fatalf("stdout contains diff finding despite parse error: %s", stdout)
+	}
+	if strings.Contains(stdout, "DIF003") {
 		t.Fatalf("stdout contains diff finding despite parse error: %s", stdout)
 	}
 }

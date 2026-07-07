@@ -8,6 +8,7 @@ See [Alpha readiness](../ALPHA_READINESS.md#visibility-checklist) for the curren
 
 ## Before first pre-alpha release
 
+- Follow the [Release checklist](../RELEASE_CHECKLIST.md).
 - Confirm README demo commands work.
 - Confirm `CHANGELOG.md` describes the release.
 - Confirm release artifacts are not promised unless published.

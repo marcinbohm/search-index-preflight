@@ -1,6 +1,7 @@
 # SearchIndexPreflight
 
 [![status: pre-alpha](https://img.shields.io/badge/status-pre--alpha-orange)](#current-status)
+[![CI](https://github.com/marcinbohm/search-index-preflight/actions/workflows/ci.yml/badge.svg)](https://github.com/marcinbohm/search-index-preflight/actions/workflows/ci.yml)
 [![Go 1.22](https://img.shields.io/badge/go-1.22-blue)](go.mod)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 
@@ -146,6 +147,7 @@ search-index-preflight version
 - [Architecture](docs/ARCHITECTURE.md)
 - [Product brief](docs/PRODUCT_BRIEF.md)
 - [Alpha readiness](docs/ALPHA_READINESS.md)
+- [Release checklist](docs/RELEASE_CHECKLIST.md)
 - [Offline migration/versioning concept](docs/MIGRATION_VERSIONING_CONCEPT.md)
 - [Changelog](CHANGELOG.md)
 

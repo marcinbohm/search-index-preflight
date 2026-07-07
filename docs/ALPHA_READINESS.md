@@ -2,6 +2,8 @@
 
 This checklist tracks repository readiness for a future `v0.0.1-prealpha` release. It does not create a release and does not imply production readiness.
 
+For the operational pre-release verification flow, see the [Release checklist](RELEASE_CHECKLIST.md).
+
 ## Ready now
 
 - README explains the PR-time schema preflight positioning.
@@ -35,6 +37,8 @@ This checklist tracks repository readiness for a future `v0.0.1-prealpha` releas
 - [ ] Keep `search-index-preflight.future.example.yaml` clearly labeled as future-only until config loading exists.
 
 ## Release checklist
+
+Use [Release checklist](RELEASE_CHECKLIST.md) as the source of truth for pre-release verification.
 
 - [ ] `go test ./...`
 - [ ] `go vet ./...`

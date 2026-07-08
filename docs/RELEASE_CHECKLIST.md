@@ -1,16 +1,20 @@
 # Release checklist
 
-This checklist is for preparing a future `v0.0.1-prealpha` release.
+This checklist is used before publishing any pre-alpha, alpha, or later release.
 
 It does not create a release, tag, or artifact. SearchIndexPreflight remains experimental pre-alpha until stated otherwise.
 
+## Already released
+
+- `v0.0.1-prealpha`: source-only GitHub pre-release.
+
 ## Release goal
 
-The first pre-alpha release should make it easy for external users to evaluate the idea, run examples, inspect rule metadata, and give feedback. It is not a production CI-gate release.
+A pre-alpha or alpha release should make it easy for external users to evaluate the idea, run examples, inspect rule metadata, and give feedback. It is not a production CI-gate release.
 
 ## Release type
 
-Recommended first release: source/tag release first, with binaries only if a release process is explicitly added and verified.
+Recommended current release type: source/tag release first, with binaries only if a release process is explicitly added and verified.
 
 Binaries, Homebrew, Docker images, and release automation are future options. Do not require or announce them until the repository has verified release tooling.
 
@@ -99,8 +103,8 @@ Expected:
 - `docs/CLI_CONTRACT.md` matches current command behavior.
 - `docs/RULE_CATALOG.md` lists `SIL001`-`SIL003` and `DIF001`-`DIF003`.
 - `search-index-preflight.future.example.yaml` remains clearly marked as future-only.
-- `CHANGELOG.md` does not claim a release exists before it is created.
-- Draft release notes exist at `docs/releases/v0.0.1-prealpha.md`.
+- `CHANGELOG.md` distinguishes released and unreleased changes.
+- Release notes exist for the target release under `docs/releases/`.
 
 ## Example verification
 
@@ -187,11 +191,11 @@ Notes:
 
 Before tagging:
 
-- Move relevant items from `Unreleased` into `v0.0.1-prealpha`.
+- Move relevant items from `Unreleased` into the target release section.
 - Keep a new empty `Unreleased` section above it.
 - Do not claim binaries unless they are attached.
 - Mention that this is experimental pre-alpha.
-- Review `docs/releases/v0.0.1-prealpha.md` before copying it into GitHub release notes.
+- Review the matching file under `docs/releases/` before copying it into GitHub release notes.
 - Confirm `go run ./cmd/search-index-preflight version` prints `SearchIndexPreflight version 0.0.1-prealpha`.
 
 ## Tag and release notes

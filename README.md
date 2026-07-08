@@ -2,6 +2,7 @@
 
 [![status: pre-alpha](https://img.shields.io/badge/status-pre--alpha-orange)](#current-status)
 [![CI](https://github.com/marcinbohm/search-index-preflight/actions/workflows/ci.yml/badge.svg)](https://github.com/marcinbohm/search-index-preflight/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/marcinbohm/search-index-preflight?include_prereleases)](https://github.com/marcinbohm/search-index-preflight/releases)
 [![Go 1.22](https://img.shields.io/badge/go-1.22-blue)](go.mod)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 
@@ -102,7 +103,9 @@ The future migration/versioning layer is planned as offline preflight only. It w
 
 ## Install / run from source
 
-No release artifacts have been published yet.
+Latest pre-release: [`v0.0.1-prealpha`](https://github.com/marcinbohm/search-index-preflight/releases/tag/v0.0.1-prealpha).
+
+This is currently a source-only pre-alpha release. Binary release artifacts are not published yet.
 
 Requirements:
 

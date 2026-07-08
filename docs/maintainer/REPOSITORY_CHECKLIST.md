@@ -6,7 +6,7 @@ These items are manual repository-presentation tasks for maintainers.
 
 See [Alpha readiness](../ALPHA_READINESS.md#visibility-checklist) for the current recommended GitHub topics.
 
-## Before first pre-alpha release
+## Before a release
 
 - Follow the [Release checklist](../RELEASE_CHECKLIST.md).
 - Confirm README demo commands work.

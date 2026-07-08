@@ -4,7 +4,9 @@ All notable changes to SearchIndexPreflight will be documented in this file.
 
 ## Unreleased
 
-_No unreleased changes._
+### Changed
+
+- Aligned README and readiness documentation after the `v0.0.1-prealpha` source-only pre-release.
 
 ## v0.0.1-prealpha - 2026-07-07
 

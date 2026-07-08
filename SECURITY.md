@@ -62,3 +62,7 @@ SearchIndexPreflight is not a secret scanner, vulnerability scanner, cluster har
 Public GitHub issues are public forever.
 
 Before posting, remove confidential mappings, logs, credentials, customer data, internal names, and reduce the example to the smallest synthetic case.
+
+If GitHub security advisories are not available for this repository, security-sensitive reports may be sent to search-index-preflight@proton.me.
+
+Do not include vulnerability details, credentials, production mappings, cluster URLs, private logs, internal service names, or customer data in public GitHub issues.

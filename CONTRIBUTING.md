@@ -185,3 +185,9 @@ Recommended labels:
 Do not include production mappings, customer data, real logs, credentials, tokens, internal service names, or confidential index patterns.
 
 Read `SECURITY.md` before reporting security issues or sharing examples.
+
+## Code of Conduct
+
+This project follows the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md).
+
+Code of conduct incidents may be reported to search-index-preflight@proton.me.

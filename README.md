@@ -119,6 +119,19 @@ go run ./cmd/search-index-preflight --help
 go run ./cmd/search-index-preflight lint --mapping examples/basic/mapping.json
 ```
 
+Install the current source-only pre-release with Go:
+
+```bash
+go install github.com/marcinbohm/search-index-preflight/cmd/search-index-preflight@v0.0.1-prealpha
+search-index-preflight version
+```
+
+Expected:
+
+```
+SearchIndexPreflight version 0.0.1-prealpha
+```
+
 ## Commands
 
 ```bash

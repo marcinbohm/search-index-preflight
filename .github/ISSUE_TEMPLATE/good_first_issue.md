@@ -2,7 +2,7 @@
 name: Good first issue
 about: Template for maintainers creating beginner-friendly issues
 title: "good first issue: "
-labels: ["type: good-first-issue"]
+labels: ["good first issue"]
 assignees: ""
 ---
 

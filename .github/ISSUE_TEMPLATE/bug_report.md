@@ -2,7 +2,7 @@
 name: Bug report
 about: Report incorrect behavior in SearchIndexPreflight
 title: "bug: "
-labels: ["type: bug"]
+labels: ["bug"]
 assignees: ""
 ---
 

@@ -158,27 +158,65 @@ PRs should be small.
 
 ## Issue labels
 
-Recommended labels:
+The project organizes work using four main label families. Use the current labels
+below when suggesting or helping with issues; maintainers may add labels as the
+project evolves.
 
-- `type: implementation`
+### Type
+
+Describes the kind of work:
+
+- `type: chore`
+- `type: design`
 - `type: docs`
-- `type: fixture`
-- `type: rule`
-- `type: bug`
+- `type: epic`
 - `type: feature`
-- `type: false-positive`
-- `type: compatibility`
-- `type: good-first-issue`
+- `type: feedback`
+- `type: release`
+- `type: rule`
+- `type: test`
+
+### Area
+
+Identifies the part of the project affected:
+
 - `area: cli`
-- `area: parser`
-- `area: rules`
-- `area: report`
-- `area: fixtures`
+- `area: config`
+- `area: diff`
 - `area: docs`
-- `stage: mvp`
-- `stage: alpha`
-- `stage: beta`
-- `stage: v1`
+- `area: examples`
+- `area: lint`
+- `area: migration-versioning`
+- `area: release`
+- `area: reports`
+
+### Priority
+
+Indicates urgency or planned order:
+
+- `priority: p0`
+- `priority: p1`
+- `priority: p2`
+- `priority: p3`
+
+### Status
+
+Shows the current execution state:
+
+- `status: needs-design`
+- `status: ready`
+- `status: blocked`
+- `status: future`
+
+### Community
+
+These GitHub community labels are separate from the project taxonomy:
+
+- `good first issue`
+- `help wanted`
+
+The bug report template also uses GitHub's standard `bug` label. It is not a
+`type:` label.
 
 ## Security and privacy
 
